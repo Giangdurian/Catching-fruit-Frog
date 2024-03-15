@@ -1,11 +1,12 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "GameObject.h"
+#include "Fruit.h"
+#include <random>
 
 GameObject* player;
 //GameObject* enemy;
 //Map* map;
-
 
 SDL_Renderer* Game::renderer = nullptr;
 
@@ -59,8 +60,35 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	}
 	loadBackground("img/background1.png");
 	//create a new object, in this case it's a player;
-	player = new GameObject("img/frog1.png", WINDOW_WIDTH / 2 - 90, WINDOW_HEIGHT - 90);
+	player = new GameObject("img/frog1.png", WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT - 60);
 }
+
+	void Game::spawnFruits()
+	{		// Initialize path to fruits images
+			std::vector<std::string> fruitPaths = {
+				"img/melon.png",
+				"img/nho.png",
+				"img/star.png",
+				"img/cherry.png",
+				"img/bom.png"
+			};
+			// Shuffle fruits
+			std::random_device rd;
+			std::mt19937 g(rd());
+			std::shuffle(fruitPaths.begin(), fruitPaths.end(), g);
+
+			int num = 1 + rand() % 5;
+
+			for (int i = 0; i < num; ++i)
+			{
+				int randomIndex = rand() % fruitPaths.size();
+				std::string fruit_type = fruitPaths[randomIndex];
+
+				// Add a new fruits and push_back into the fruits_list;
+				int randomX = 40 + rand() % (WINDOW_WIDTH - 80);
+				fruits.push_back(new Fruit(fruit_type.c_str(), randomX, 0));
+			}
+	}
 
 
 
@@ -79,8 +107,29 @@ void Game::handleEvent()
 
 void Game::update()
 {
+	if (SDL_GetTicks() - startTime >= 3000) {
+		spawnFruits();
+		startTime = SDL_GetTicks();
+	}
+	
+	for (auto it = fruits.begin(); it != fruits.end(); ) {
+		if (player->checkCollision(*it)) {
+			// Delete fruit if collide
+			isEating = true;
+			delete* it;
+			it = fruits.erase(it);
+			cnt++;
+			std::cout << "Score: " << cnt << std::endl;
+			player->openMouth();
+		}
+		else {
+			// Move if not collide
+			(*it)->Update();
+			player->closeMouth();
+			++it;
+		}
+	}
 	player->Update();
-	//enemy->Update();
 }
 
 void Game::render()
@@ -88,6 +137,10 @@ void Game::render()
 	SDL_RenderClear(renderer);
 	drawBackground();
 	player->Render();
+	for (auto& fruit : fruits)
+	{
+		fruit->Render();
+	}
 	SDL_RenderPresent(renderer);
 }
 
@@ -101,10 +154,11 @@ void Game::cleanUp()
 
 }
 
+
 void Game::clean() {
 	cleanUp();
 	SDL_DestroyWindow(Game::window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
-	std::cout << "Game Clean\n";
+	std::cout << "Game Clean!\n";
 }

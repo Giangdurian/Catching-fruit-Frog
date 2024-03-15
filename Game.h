@@ -3,10 +3,12 @@
 #include<SDL.h>
 #include <SDL_image.h>
 #include<iostream>
+#include <vector>
+#include "Fruit.h"
 
 const int WINDOW_HEIGHT = 600;
 const int WINDOW_WIDTH = 600;
-
+static bool isEating = false;
 
 class Game {
 public:
@@ -21,6 +23,10 @@ public:
 	void drawBackground();
 	void clean();
 	void cleanUp();//Giai phong bo nho cua player
+
+	//Handle fruits
+	void spawnFruits();
+
 	bool running() { return isRunning; }
 
 	static	SDL_Renderer* renderer;
@@ -30,4 +36,8 @@ private:
 	bool isRunning;
 	SDL_Window* window;
 	SDL_Texture* backgroundTexture;
+
+	std::vector<Fruit*> fruits;
+
+	Uint32 startTime = 0;
 };

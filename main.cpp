@@ -4,6 +4,7 @@ Game* game = nullptr;
 
 int main(int argc, char* args[])
 {
+    srand(static_cast<unsigned int>(time(NULL)));
     const int FPS = 60;
     const int FrameDelay = 1000 / FPS;
 

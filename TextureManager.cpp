@@ -2,10 +2,11 @@
 
 SDL_Texture* TextureManager::LoadTexture(const char* texture)
 {
-	SDL_Surface* tempSurface = IMG_Load(texture);
-	SDL_Texture* tex = SDL_CreateTextureFromSurface(Game::renderer, tempSurface);
-	SDL_FreeSurface(tempSurface);
 
+	SDL_Surface* tmpSurface = IMG_Load(texture);
+	SDL_SetColorKey(tmpSurface, SDL_TRUE, SDL_MapRGB(tmpSurface->format, 255, 255, 255));
+	SDL_Texture*  tex = SDL_CreateTextureFromSurface(Game::renderer, tmpSurface);
+	SDL_FreeSurface(tmpSurface);
 	return tex;
 }
 
