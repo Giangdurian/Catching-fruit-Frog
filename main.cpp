@@ -4,7 +4,7 @@ Game* game = nullptr;
 
 int main(int argc, char* args[])
 {
-    srand(static_cast<unsigned int>(time(NULL)));
+    srand(time(NULL));
     const int FPS = 60;
     const int FrameDelay = 1000 / FPS;
 
@@ -17,11 +17,11 @@ int main(int argc, char* args[])
 
     while (game->running()) {
         frameStart = SDL_GetTicks();
-
         game->handleEvent();//Handle the input from player's action: mouse, keyboard,...
-        game->update();
+        if (isPlaying) {
+            game->update();
+        }
         game->render();
-
         frameTime = SDL_GetTicks() - frameStart;
         if (FrameDelay > frameTime) {
             SDL_Delay(FrameDelay - frameTime);
