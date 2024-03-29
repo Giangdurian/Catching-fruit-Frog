@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <ctime>
 
-Enemy::Enemy(const char* path, int x, int y) 
+Enemy::Enemy(const char* path, int x, int y)
 {
 	enemyTexture = TextureManager::LoadTexture(path);
 	xPos = x;
@@ -12,7 +12,7 @@ Enemy::Enemy(const char* path, int x, int y)
 		speedX = rand() % 7 - 3;
 		speedY = rand() % 7 - 3;
 	} while ((speedX <= 2 && speedX >= -2) || (speedY <= 2 && speedY >= -2));
-	
+
 	destRect.w = ENEMY_SIZE;
 	destRect.h = ENEMY_SIZE;
 }
@@ -62,4 +62,3 @@ bool Enemy::checkCollision(int playerX, int playerY, int playerW, int playerH) c
 		yPos < playerY + playerH &&
 		yPos + destRect.h > playerY;
 }
-

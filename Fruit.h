@@ -10,6 +10,7 @@ public:
 
     void Update();
     void Render();
+    bool checkCollision(int playerX, int playerY, int playerW, int playerH) const;
     int getXPos() const { return xPos; }
     int getYPos() const { return yPos; }
 private:

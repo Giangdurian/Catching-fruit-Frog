@@ -5,6 +5,7 @@
 
 GameObject* player;
 Uint32 eatingStartTime = 0;
+Uint32 lose_Time = 0;
 
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -62,28 +63,24 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 }
 
 void Game::spawnFruits()
-	{	// Initialize path to fruits images
-		std::vector<std::string> fruitPaths = {
-			"img/melon.png",
-			"img/nho.png",
-			"img/star.png",
-			"img/cherry.png",
-		};
-		// Shuffle fruits
-		std::random_device rd;
-		std::mt19937 g(rd());
-		std::shuffle(fruitPaths.begin(), fruitPaths.end(), g);
+{	// Initialize path to fruits images
+	std::vector<std::string> fruitPaths = {
+		"img/melon.png",
+		"img/nho.png",
+		"img/star.png",
+		"img/cherry.png",
+	};
 
-		int num = 1 + rand() % 5;
+	int num = 1 + rand() % 5;
 
-		for (int i = 0; i < num; ++i)
-		{
-			int randomIndex = rand() % fruitPaths.size();
-			std::string fruit_type = fruitPaths[randomIndex];
-			// Add a new fruits and push_back into the fruits_list;
-			int randomX = 40 + rand() % (WINDOW_WIDTH - 80);
-			fruits.push_back(new Fruit(fruit_type.c_str(), randomX, 0));
-		}
+	for (int i = 0; i < num; ++i)
+	{
+		int randomIndex = rand() % fruitPaths.size();
+		std::string fruit_type = fruitPaths[randomIndex];
+		// Add a new fruits and push_back into the fruits_list;
+		int randomX = 40 + rand() % (WINDOW_WIDTH - 80);
+		fruits.push_back(new Fruit(fruit_type.c_str(), randomX, 0));
+	}
 }
 
 void Game::spawnEnemies()
@@ -102,8 +99,9 @@ void Game::handleEvent()
 	case SDL_QUIT:
 		isRunning = false;
 		break;
+	//Menu: start, exit, how to play update later;
 	case SDL_MOUSEBUTTONDOWN:
-		if (isPlaying)	break;
+		if (isPlaying || lose == true)	break;
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 		if (x > 240 && x < 480 && y > 160 && y < 320) {
@@ -121,23 +119,23 @@ void Game::handleEvent()
 void Game::update()
 {
 	//Spawn a new enemy every 6 seconds until number of enemies are max = 5
-	if (number_of_enemy < MAX_ENEMY_NUMBERS && std::chrono::steady_clock::now() - lastEnemySpawnTime >= std::chrono::seconds(6))
+	if (isPlaying && number_of_enemy < MAX_ENEMY_NUMBERS && std::chrono::steady_clock::now() - lastEnemySpawnTime >= std::chrono::seconds(6))
 	{
 		spawnEnemies();
 		lastEnemySpawnTime = std::chrono::steady_clock::now();
 	}
 	//spawn fruits every 3 second
-	if (SDL_GetTicks() - startTime >= 3000) {
+	if (isPlaying && SDL_GetTicks() - startTime >= 3000) {
 		spawnFruits();
 		startTime = SDL_GetTicks();
 	}
-	
+
+
 	for (auto it = fruits.begin(); it != fruits.end();) {
-		if (player->checkCollision(*it)) {
-			// Delete fruit if collide
+		if ((*it)->checkCollision(player->getXpos(), player->getYpos(), player->getWidth(), player->getHeight())) {
 			eatingStartTime = SDL_GetTicks();
 			isEating = true;
-			delete* it;
+			//Delete fruit if collide and keep update the following fruits;
 			it = fruits.erase(it);
 			cnt++;
 			std::cout << "Score: " << cnt << std::endl;
@@ -145,7 +143,7 @@ void Game::update()
 			break;
 		}
 		else {
-			// Move if not collide
+			// Move if not colliding
 			(*it)->Update();
 			++it;
 		}
@@ -155,11 +153,11 @@ void Game::update()
 	if (isEating) {
 		Uint32 currentTime = SDL_GetTicks();
 		Uint32 elapsedTime = currentTime - eatingStartTime;
-		if (elapsedTime >= 50 && elapsedTime <= 200) { // Open mouth in 0.1 - 0.3s
+		if (elapsedTime >= 50 && elapsedTime <= 200) { // Open mouth in 0.05 - 0.2s
 			// Update open_mouth status of player
-			player->changeTexture("img/frog2.png");
+			player->changeTexture("img/frog2_resize.png");
 		}
-		else if (elapsedTime > 200 && elapsedTime <= 500) { // 0.3s - 0.5s
+		else if (elapsedTime > 200) { // 0.2s - 0.5s
 			// Reset to player's initial status close_mouth;
 			isEating = false;
 			player->changeTexture("img/frog1_resize.png");
@@ -167,6 +165,15 @@ void Game::update()
 	}
 	for (auto it = enemies.begin(); it != enemies.end();) {
 		if ((*it)->checkCollision(player->getXpos(), player->getYpos(), player->getWidth(), player->getHeight())) {
+			Uint32 deadtime = SDL_GetTicks();
+			fruits.clear();
+			enemies.clear();
+			number_of_enemy = 0;
+			player->changeTexture("img/frog1_resize.png");
+			Uint32 currentTime = SDL_GetTicks();
+			Uint32 elapsedTime = currentTime - deadtime;
+			lose = true;
+			lose_Time = SDL_GetTicks();
 			isPlaying = false;
 			break;
 		}
@@ -180,6 +187,20 @@ void Game::update()
 void Game::render()
 {
 	SDL_RenderClear(renderer);
+	if (lose) {
+		Uint32 currentTime = SDL_GetTicks();
+		Uint32 elapsedTime = currentTime - lose_Time;
+		if (elapsedTime >= 0 && elapsedTime <= 1000) { 
+			loadBackground("img/background_exit_3.png");
+		}else if (elapsedTime > 1000 && elapsedTime <= 2000) { 
+			loadBackground("img/background_exit_2.png");
+		}else if (elapsedTime > 2000 && elapsedTime <= 3000) { 
+			loadBackground("img/background_exit_1.png");
+		}else if (elapsedTime > 3000) { 
+			lose = false;
+			loadBackground("img/background1.png");
+		}
+	}
 	drawBackground();
 	if (isPlaying) {
 		player->Render();
@@ -198,13 +219,17 @@ void Game::cleanUp()
 	if (player != nullptr)
 	{
 		delete player;
-		player = nullptr;
+		//player = nullptr;
 	}
 	for (auto& enemy : enemies) {
 		if (enemy != nullptr) {
 			delete enemy;
-			enemy = nullptr;
+			//enemy = nullptr;
 		}
+	}
+	for (auto& fruit : fruits) {
+		delete fruit;
+		//fruit = nullptr;
 	}
 }
 

@@ -10,15 +10,14 @@ GameObject::GameObject(const char* texturesheet, int x, int y)
 {
     objTexture = TextureManager::LoadTexture(texturesheet);
 
-	xPos = x;
-	yPos = y;
+    xPos = x;
+    yPos = y;
     destRect.w = PLAYER_WIDTH;
     destRect.h = PLAYER_HEIGHT;
-	speed = 5;
+    speed = 5;
 
-	initialJumpYPos = y;
-	yVelocity = 0;
-	maxJumpHeight = 200;
+    yVelocity = 0;
+    maxJumpHeight = 200;
 }
 
 GameObject::~GameObject()
@@ -31,11 +30,11 @@ void GameObject::changeTexture(const char* path)
 }
 
 bool GameObject::checkCollision(const Fruit* fruit) const {
-	SDL_Rect playerRect = { xPos, yPos, destRect.w, destRect.h };
-	SDL_Rect fruitRect = { fruit->getXPos(), fruit->getYPos(), FRUIT_SIZE, FRUIT_SIZE };
+    SDL_Rect playerRect = { xPos, yPos, destRect.w, destRect.h };
+    SDL_Rect fruitRect = { fruit->getXPos(), fruit->getYPos(), FRUIT_SIZE, FRUIT_SIZE };
 
-	//Check if rentangles are intersected
-	return SDL_HasIntersection(&playerRect, &fruitRect);
+    //Check if rentangles are intersected
+    return SDL_HasIntersection(&playerRect, &fruitRect);
 }
 
 void GameObject::Update()
@@ -53,10 +52,9 @@ void GameObject::Update()
             xPos = WINDOW_WIDTH - destRect.w;
         }
     }
-    if (currentKeyStates[SDL_SCANCODE_UP] && !isJumping) {
+    if (isFalling == false && currentKeyStates[SDL_SCANCODE_UP] && isJumping == false) {
         yVelocity = -jumpForce;
         isJumping = true;
-        initialJumpYPos = yPos;
     }
     if (isJumping) {
         yVelocity += gravity;
@@ -73,7 +71,7 @@ void GameObject::Update()
         }
     }
     if (isFalling) {
-        // Update yVelocity(Move down velocity)
+        // Update yVelocity(Increase velocity)
         yVelocity += gravity;
         yPos += yVelocity;
 
@@ -93,8 +91,7 @@ void GameObject::Update()
 
 void GameObject::Render()
 {
-	//Copy objTexture into renderer;
-	//destRect: determine the position and size of the object on the screen.
-	SDL_RenderCopy(Game::renderer, objTexture, NULL, &destRect);
+    //Copy objTexture into renderer;
+    //destRect: determine the position and size of the object on the screen.
+    SDL_RenderCopy(Game::renderer, objTexture, NULL, &destRect);
 }
-

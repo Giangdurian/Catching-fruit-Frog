@@ -18,7 +18,7 @@ int main(int argc, char* args[])
     while (game->running()) {
         frameStart = SDL_GetTicks();
         game->handleEvent();//Handle the input from player's action: mouse, keyboard,...
-        if (isPlaying) {
+        if (game->playing()) {
             game->update();
         }
         game->render();

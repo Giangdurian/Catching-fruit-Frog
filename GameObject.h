@@ -27,8 +27,8 @@ private:
 	int yPos;
 	int speed;
 
-	int initialJumpYPos, yVelocity, maxJumpHeight;
-	int const jumpForce = 20;
+	int yVelocity, maxJumpHeight;
+	int const jumpForce = 25;
 	SDL_Texture* objTexture;
 	SDL_Rect destRect;
 };

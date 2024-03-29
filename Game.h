@@ -11,7 +11,7 @@
 const int WINDOW_HEIGHT = 720;
 const int WINDOW_WIDTH = 720;
 static bool isEating = false;
-static bool isPlaying = false;
+static bool lose = false;
 
 class Enemy;
 
@@ -28,6 +28,7 @@ public:
 	void drawBackground();
 
 	bool running() { return isRunning; }
+	bool playing() { return isPlaying; }
 
 	void clean();
 	void cleanUp();//Giai phong bo nho cua player
@@ -36,17 +37,19 @@ public:
 	void spawnFruits();
 	void spawnEnemies();
 
+
 	static	SDL_Renderer* renderer;
 
 private:
 	int cnt = 0;
 	bool isRunning;
+	bool isPlaying;
 	SDL_Window* window;
 	SDL_Texture* backgroundTexture;
 
 	std::vector<Enemy*> enemies;
 	std::vector<Fruit*> fruits;
-	
+
 
 	Uint32 startTime = 0;
 
