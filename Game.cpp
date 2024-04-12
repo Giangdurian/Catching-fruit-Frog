@@ -4,8 +4,13 @@
 #include <random>
 
 GameObject* player;
+GameObject* Player2;
 Uint32 eatingStartTime = 0;
 Uint32 lose_Time = 0;
+static bool loaded_menu = false;
+static bool loaded_difficulty = false;
+static bool paused = false;
+static int mode = 1;
 
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -57,21 +62,24 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	{
 		isRunning = false;
 	}
-	loadBackground("img/background1.png");
+	loadBackground("img/background_menu.png");
 	//create a new object, in this case it's a player;
-	player = new GameObject("img/frog1_resize.png", WINDOW_WIDTH / 2 - PLAYER_WIDTH, WINDOW_HEIGHT - PLAYER_HEIGHT);
+	player = new GameObject("img/frog1.png", WINDOW_WIDTH / 2 - PLAYER_WIDTH, WINDOW_HEIGHT - PLAYER_HEIGHT);
 }
 
 void Game::spawnFruits()
 {	// Initialize path to fruits images
 	std::vector<std::string> fruitPaths = {
 		"img/melon.png",
-		"img/nho.png",
-		"img/star.png",
+		"img/grape.png",
+		"img/strawberry.png",
 		"img/cherry.png",
+		"img/blueberry.png",
+		"img/banana.png",
+		"img/apple.png"
 	};
 
-	int num = 1 + rand() % 5;
+	int num = 1 + rand() % 7;
 
 	for (int i = 0; i < num; ++i)
 	{
@@ -87,7 +95,7 @@ void Game::spawnEnemies()
 {
 	int randomX = rand() % (WINDOW_WIDTH - 40);
 
-	enemies.push_back(new Enemy("img/bom.png", randomX, 0));
+	enemies.push_back(new Enemy("img/bom.png", randomX, 0, MAX_SPEED));
 	number_of_enemy++;
 }
 
@@ -104,11 +112,65 @@ void Game::handleEvent()
 		if (isPlaying || lose == true)	break;
 		int x, y;
 		SDL_GetMouseState(&x, &y);
-		if (x > 240 && x < 480 && y > 160 && y < 320) {
+		std::cout << x << "  " <<  y << std::endl;
+		if (x > 270 && x < 500 && y > 160 && y < 240 && !loaded_difficulty && !paused) {
 			isPlaying = true;
+			loadBackground("img/background1.png");
+			loaded_menu = true;
+			if (mode == 1) {
+				MAX_ENEMY_NUMBERS = 5;
+				MAX_SPEED = 7;
+			}
+			else if (mode == 2) {
+				MAX_ENEMY_NUMBERS = 7;
+				MAX_SPEED = 9;
+				std::cout << "MODE: " << 2 << std::endl;
+			}
 		}
-		if (x > 240 && x < 480 && y > 360 && y < 420) {
+		else if (x > 270 && x < 500 && y > 560 && y < 650 && !loaded_difficulty && !paused) {
 			isRunning = false;
+		}
+		else if (x > 270 && x < 500 && y > 455 && y < 520 && !loaded_difficulty && !paused) {
+			loadBackground("img/difficulty.png");
+			loaded_difficulty = true;
+		}else if (loaded_difficulty && !paused) {
+			if (x > 230 && x < 520 && y > 195 && y < 300) {
+				mode = 1;
+				loadBackground("img/background_menu.png");
+				loaded_difficulty = false;
+			}
+			else if (x > 230 && x < 520 && y > 400 && y < 520) {
+				mode = 2;
+				loadBackground("img/background_menu.png");
+				loaded_difficulty = false;
+			}
+		}
+		else if (paused && !isPlaying) {
+			if (x > 270 && x < 500 && y > 170 && y < 250) {
+				isPlaying = true;
+				loadBackground("img/background1.png");
+				paused = false;
+			}
+			else if (x > 270 && x < 500 && y > 330 && y < 420) {
+				end_game();
+				paused = false;
+				loadBackground("img/background1.png");
+				isPlaying = true;
+			}
+			else if (x > 270 && x < 500 && y > 500 && y < 600) {
+				lose = true;
+				end_game();
+				isPlaying = false;
+				loadBackground("img/background_menu.png");
+				paused = false;
+			}
+		}
+		break;
+	case SDL_KEYDOWN:
+		if (isPlaying && event.key.keysym.sym == SDLK_ESCAPE) {
+			loadBackground("img/resume.png");
+			paused = true;
+			isPlaying = false;
 		}
 		break;
 	default:
@@ -134,15 +196,16 @@ void Game::update()
 	for (auto it = fruits.begin(); it != fruits.end();) {
 		if ((*it)->checkCollision(player->getXpos(), player->getYpos(), player->getWidth(), player->getHeight())) {
 			eatingStartTime = SDL_GetTicks();
-			isEating = true;
+			player->isEating = true;
 			//Delete fruit if collide and keep update the following fruits;
 			it = fruits.erase(it);
 			cnt++;
 			std::cout << "Score: " << cnt << std::endl;
-			player->changeTexture("img/frog2_resize.png");
 			break;
 		}
-		else {
+		else if ((*it)->getXPos() >= WINDOW_HEIGHT - FRUIT_SIZE) {
+			it = fruits.erase(it);
+		}else {
 			// Move if not colliding
 			(*it)->Update();
 			++it;
@@ -150,31 +213,27 @@ void Game::update()
 	}
 	player->Update();
 
-	if (isEating) {
+	if (player->isEating) {
 		Uint32 currentTime = SDL_GetTicks();
 		Uint32 elapsedTime = currentTime - eatingStartTime;
 		if (elapsedTime >= 50 && elapsedTime <= 200) { // Open mouth in 0.05 - 0.2s
 			// Update open_mouth status of player
-			player->changeTexture("img/frog2_resize.png");
+			player->changeTexture("img/frog2.png");
 		}
-		else if (elapsedTime > 200) { // 0.2s - 0.5s
+		else if (elapsedTime > 200) { 
 			// Reset to player's initial status close_mouth;
-			isEating = false;
-			player->changeTexture("img/frog1_resize.png");
+			player->isEating = false;
+			player->changeTexture("img/frog1.png");
 		}
 	}
 	for (auto it = enemies.begin(); it != enemies.end();) {
 		if ((*it)->checkCollision(player->getXpos(), player->getYpos(), player->getWidth(), player->getHeight())) {
+			end_game();
 			Uint32 deadtime = SDL_GetTicks();
-			fruits.clear();
-			enemies.clear();
-			number_of_enemy = 0;
-			player->changeTexture("img/frog1_resize.png");
 			Uint32 currentTime = SDL_GetTicks();
 			Uint32 elapsedTime = currentTime - deadtime;
 			lose = true;
 			lose_Time = SDL_GetTicks();
-			isPlaying = false;
 			break;
 		}
 		else {
@@ -182,6 +241,15 @@ void Game::update()
 			it++;
 		}
 	}
+}
+
+void Game::end_game() {
+	fruits.clear();
+	enemies.clear();
+	number_of_enemy = 0;
+	player->changeTexture("img/frog1.png");
+	isPlaying = false;
+	player =  new GameObject("img/frog1.png", WINDOW_WIDTH / 2 - PLAYER_WIDTH, WINDOW_HEIGHT - PLAYER_HEIGHT);
 }
 
 void Game::render()
@@ -198,7 +266,7 @@ void Game::render()
 			loadBackground("img/background_exit_1.png");
 		}else if (elapsedTime > 3000) { 
 			lose = false;
-			loadBackground("img/background1.png");
+			loadBackground("img/background_menu.png");
 		}
 	}
 	drawBackground();
@@ -212,24 +280,19 @@ void Game::render()
 		}
 	}
 	SDL_RenderPresent(renderer);
+	SDL_Delay(10);
 }
 
 void Game::cleanUp()
 {
-	if (player != nullptr)
-	{
-		delete player;
-		//player = nullptr;
-	}
+	delete player;
 	for (auto& enemy : enemies) {
 		if (enemy != nullptr) {
 			delete enemy;
-			//enemy = nullptr;
 		}
 	}
 	for (auto& fruit : fruits) {
 		delete fruit;
-		//fruit = nullptr;
 	}
 }
 

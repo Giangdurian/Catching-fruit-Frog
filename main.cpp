@@ -1,6 +1,7 @@
 ﻿#include "Game.h"
 
 Game* game = nullptr;
+//reference: Lets make game(youtube)
 
 int main(int argc, char* args[])
 {

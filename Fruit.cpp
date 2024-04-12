@@ -44,6 +44,6 @@ void Fruit::Render()
 bool Fruit::checkCollision(int playerX, int playerY, int playerW, int playerH) const {
 	return xPos < playerX + playerW &&
 		xPos > playerX - destRect.w &&
-		yPos < playerY + playerH / 3 &&
+		yPos < playerY + playerH &&
 		yPos > playerY - destRect.h;
 }

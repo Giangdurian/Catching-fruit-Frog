@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <iostream>
 #include <vector>
 #include "Fruit.h"
@@ -8,10 +9,12 @@
 #include <chrono>
 #include <ctime>
 
-const int WINDOW_HEIGHT = 720;
-const int WINDOW_WIDTH = 720;
-static bool isEating = false;
+const int WINDOW_HEIGHT = 780;
+const int WINDOW_WIDTH = 780;
+//static bool isEating = false;
 static bool lose = false;
+static int MAX_ENEMY_NUMBERS = 5;
+static int MAX_SPEED = 7;
 
 class Enemy;
 
@@ -26,6 +29,7 @@ public:
 	void render();
 	void loadBackground(const char* path);
 	void drawBackground();
+	void move1();
 
 	bool running() { return isRunning; }
 	bool playing() { return isPlaying; }
@@ -37,7 +41,7 @@ public:
 	void spawnFruits();
 	void spawnEnemies();
 
-
+	void end_game();
 	static	SDL_Renderer* renderer;
 
 private:
@@ -46,6 +50,7 @@ private:
 	bool isPlaying;
 	SDL_Window* window;
 	SDL_Texture* backgroundTexture;
+
 
 	std::vector<Enemy*> enemies;
 	std::vector<Fruit*> fruits;

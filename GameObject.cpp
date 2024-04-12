@@ -29,14 +29,6 @@ void GameObject::changeTexture(const char* path)
     objTexture = TextureManager::LoadTexture(path);
 }
 
-bool GameObject::checkCollision(const Fruit* fruit) const {
-    SDL_Rect playerRect = { xPos, yPos, destRect.w, destRect.h };
-    SDL_Rect fruitRect = { fruit->getXPos(), fruit->getYPos(), FRUIT_SIZE, FRUIT_SIZE };
-
-    //Check if rentangles are intersected
-    return SDL_HasIntersection(&playerRect, &fruitRect);
-}
-
 void GameObject::Update()
 {
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
@@ -52,7 +44,7 @@ void GameObject::Update()
             xPos = WINDOW_WIDTH - destRect.w;
         }
     }
-    if (isFalling == false && currentKeyStates[SDL_SCANCODE_UP] && isJumping == false) {
+    if (isFalling == false && (currentKeyStates[SDL_SCANCODE_UP]) && isJumping == false) {
         yVelocity = -jumpForce;
         isJumping = true;
     }
@@ -64,9 +56,7 @@ void GameObject::Update()
             isJumping = false;
             // Set yPos as the highest pos that player can jump
             yPos = WINDOW_HEIGHT - maxJumpHeight;
-            // Set vY = 0
             yVelocity = 0;
-            // Update Falling status
             isFalling = true;
         }
     }
@@ -81,6 +71,7 @@ void GameObject::Update()
             isFalling = false;
         }
     }
+    //SDL_Delay(10);
 
     destRect.x = xPos;
     destRect.y = yPos;
@@ -93,5 +84,5 @@ void GameObject::Render()
 {
     //Copy objTexture into renderer;
     //destRect: determine the position and size of the object on the screen.
-    SDL_RenderCopy(Game::renderer, objTexture, NULL, &destRect);
+    SDL_RenderCopy(Game::renderer, objTexture, NULL, &destRect);//NULL: whole picture
 }

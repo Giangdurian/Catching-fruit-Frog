@@ -11,10 +11,11 @@ class GameObject {
 public:
 	GameObject(const char* texturesheet, int x, int y);
 	~GameObject();
-	bool checkCollision(const Fruit* fruit) const;
 	void Update();
+	void Update2();
 	void Render();
 	void changeTexture(const char* path);
+	bool isEating = false;
 
 	int getXpos() const { return xPos; }
 	int getYpos() const { return yPos; }
@@ -26,6 +27,7 @@ private:
 	int xPos; //x and y coordinates of the top - left corner of the rectangle.
 	int yPos;
 	int speed;
+	bool is_eating = false;
 
 	int yVelocity, maxJumpHeight;
 	int const jumpForce = 25;

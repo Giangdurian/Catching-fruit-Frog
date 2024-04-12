@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <ctime>
 
-Enemy::Enemy(const char* path, int x, int y)
+Enemy::Enemy(const char* path, int x, int y, int MAX_SPEED)
 {
 	enemyTexture = TextureManager::LoadTexture(path);
 	xPos = x;
 	yPos = y;
 	do {
-		speedX = rand() % 7 - 3;
-		speedY = rand() % 7 - 3;
+		speedX = rand() % MAX_SPEED - 4;
+		speedY = rand() % MAX_SPEED - 4;
 	} while ((speedX <= 2 && speedX >= -2) || (speedY <= 2 && speedY >= -2));
 
 	destRect.w = ENEMY_SIZE;
@@ -45,6 +45,10 @@ void Enemy::Update()
 			yPos = WINDOW_HEIGHT - destRect.h;
 		}
 	}
+	//Rotate the enemies
+	angle -= 3;
+	if (angle == -360)	angle += 360;
+
 	destRect.x = xPos;
 	destRect.y = yPos;
 	destRect.w = ENEMY_SIZE;
@@ -53,12 +57,14 @@ void Enemy::Update()
 
 void Enemy::Render()
 {
-	SDL_RenderCopy(Game::renderer, enemyTexture, NULL, &destRect);
+	SDL_RenderCopyEx(Game::renderer, enemyTexture, NULL, &destRect, angle, NULL, SDL_FLIP_NONE);
 }
 
 bool Enemy::checkCollision(int playerX, int playerY, int playerW, int playerH) const {
-	return xPos < playerX + playerW &&
-		xPos + destRect.w > playerX &&
-		yPos < playerY + playerH &&
-		yPos + destRect.h > playerY;
+	return destRect.x + destRect.w > playerX + playerW / 5 && destRect.x < playerX + 3 * playerW / 4
+			&& destRect.y + destRect.h > playerY && destRect.y < playerY + 3 * playerW / 4;
 }
+//return xPos < playerX + playerW / 2 &&
+//	xPos > playerX - destRect.w &&
+//	yPos < playerY + playerH / 2 &&
+//	yPos > playerY - destRect.h;
