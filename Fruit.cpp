@@ -24,9 +24,6 @@ void Fruit::Update()
 
 	destRect.x = xPos;
 	destRect.y = yPos;
-	//height and width(size) of the pictures
-	destRect.w = FRUIT_SIZE;
-	destRect.h = FRUIT_SIZE;
 	//Check if fruits are out of window, destroy it;
 	if (yPos > WINDOW_HEIGHT)
 	{

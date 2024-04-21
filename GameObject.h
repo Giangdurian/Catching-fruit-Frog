@@ -16,6 +16,7 @@ public:
 	void Render();
 	void changeTexture(const char* path);
 	bool isEating = false;
+	int hp;
 
 	int getXpos() const { return xPos; }
 	int getYpos() const { return yPos; }
@@ -28,9 +29,11 @@ private:
 	int yPos;
 	int speed;
 	bool is_eating = false;
+	bool isJumping, isFalling;
 
 	int yVelocity, maxJumpHeight;
-	int const jumpForce = 25;
+	int const jumpForce = 20;
 	SDL_Texture* objTexture;
 	SDL_Rect destRect;
+	
 };

@@ -9,8 +9,8 @@ Enemy::Enemy(const char* path, int x, int y, int MAX_SPEED)
 	xPos = x;
 	yPos = y;
 	do {
-		speedX = rand() % MAX_SPEED - 4;
-		speedY = rand() % MAX_SPEED - 4;
+		speedX = rand() % MAX_SPEED - 3;
+		speedY = rand() % MAX_SPEED - 3;
 	} while ((speedX <= 2 && speedX >= -2) || (speedY <= 2 && speedY >= -2));
 
 	destRect.w = ENEMY_SIZE;
@@ -61,10 +61,8 @@ void Enemy::Render()
 }
 
 bool Enemy::checkCollision(int playerX, int playerY, int playerW, int playerH) const {
-	return destRect.x + destRect.w > playerX + playerW / 5 && destRect.x < playerX + 3 * playerW / 4
-			&& destRect.y + destRect.h > playerY && destRect.y < playerY + 3 * playerW / 4;
+	return xPos < playerX + playerW &&
+		xPos > playerX - destRect.w &&
+		yPos < playerY + playerH &&
+		yPos > playerY - destRect.h;
 }
-//return xPos < playerX + playerW / 2 &&
-//	xPos > playerX - destRect.w &&
-//	yPos < playerY + playerH / 2 &&
-//	yPos > playerY - destRect.h;

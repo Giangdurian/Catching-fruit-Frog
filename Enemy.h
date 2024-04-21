@@ -1,6 +1,6 @@
 #pragma once
 #include "Game.h"
-int const ENEMY_SIZE = 45;
+int const ENEMY_SIZE = 40;
 
 class Enemy {
 public:
