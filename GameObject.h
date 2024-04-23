@@ -4,8 +4,8 @@
 #include "Enemy.h"
 
 int const fallSpeed = 20;
-int const PLAYER_WIDTH = 84 * 3 / 4;
-int const PLAYER_HEIGHT = 80 * 3 / 4;
+int const PLAYER_WIDTH = 84  * 4 / 5;
+int const PLAYER_HEIGHT = 80 * 4 / 5;
 
 class GameObject {
 public:
@@ -17,7 +17,10 @@ public:
 	void changeTexture(const char* path);
 	bool isEating = false;
 	int hp;
-
+	bool isDead = false;
+	bool Protected;
+	int bonusHP;
+	std::chrono::steady_clock::time_point protecting_start_time;
 	int getXpos() const { return xPos; }
 	int getYpos() const { return yPos; }
 	int getWidth() const { return destRect.w; }
@@ -28,12 +31,12 @@ private:
 	int xPos; //x and y coordinates of the top - left corner of the rectangle.
 	int yPos;
 	int speed;
-	bool is_eating = false;
 	bool isJumping, isFalling;
 
+	
+
 	int yVelocity, maxJumpHeight;
-	int const jumpForce = 20;
+	int const jumpForce = 22;
 	SDL_Texture* objTexture;
 	SDL_Rect destRect;
-	
 };

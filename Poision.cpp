@@ -35,8 +35,8 @@ void Poision::Render()
 }
 
 bool Poision::checkCollision(int playerX, int playerY, int playerW, int playerH) const {
-	return xPos < playerX + playerW &&
-		xPos > playerX - destRect.w &&
-		yPos < playerY + playerH &&
-		yPos > playerY - destRect.h;
+	return xPos < playerX + playerW - 10 &&
+		xPos > playerX - destRect.w + 10 &&
+		yPos < playerY + playerH - 2 * playerH / 5 &&
+		yPos > playerY - destRect.h + 10;
 }

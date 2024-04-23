@@ -27,7 +27,10 @@ void Enemy::Update()
 
 	if (xPos <= 0 || xPos >= WINDOW_WIDTH - destRect.w)
 	{
-		speedX = -speedX;
+		do {
+			speedX = -(speedX + rand() % 7 - 3);
+		} while (speedX < -6 || speedX > 6 || (speedX < 2  && speedX > -2));
+
 		if (xPos <= 0) {
 			xPos = 0;
 		}
@@ -35,9 +38,14 @@ void Enemy::Update()
 			xPos = WINDOW_WIDTH - destRect.w;
 		}
 	}
+
 	if (yPos <= 0 || yPos >= WINDOW_HEIGHT - destRect.h)
 	{
-		speedY = -speedY;
+		do {
+			speedY = -(speedY + rand() % 7 - 3);
+		} while (speedY < -6 || speedY > 6 || (speedY < 2 && speedY > -2));
+		
+		
 		if (yPos <= 0) {
 			yPos = 0;
 		}
@@ -61,8 +69,8 @@ void Enemy::Render()
 }
 
 bool Enemy::checkCollision(int playerX, int playerY, int playerW, int playerH) const {
-	return xPos < playerX + playerW &&
-		xPos > playerX - destRect.w &&
-		yPos < playerY + playerH &&
-		yPos > playerY - destRect.h;
+	return xPos < playerX + playerW - 10 &&
+		xPos > playerX - destRect.w + 10 &&
+		yPos < playerY + playerH - 2 * playerH / 5 &&
+		yPos > playerY - destRect.h + 10;
 }

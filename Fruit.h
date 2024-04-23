@@ -13,9 +13,12 @@ public:
     bool checkCollision(int playerX, int playerY, int playerW, int playerH) const;
     int getXPos() const { return xPos; }
     int getYPos() const { return yPos; }
+    bool is_HP;
+    bool is_Shield;
 private:
     int xPos, yPos;
     int speed;
+    
 
     SDL_Texture* fruitTexture;
     SDL_Rect destRect;

@@ -14,11 +14,14 @@ GameObject::GameObject(const char* texturesheet, int x, int y)
     destRect.h = PLAYER_HEIGHT;
     speed = 5;
     hp = 3;
+    Protected = false;
+    bonusHP = 3;
 
     yVelocity = 0;
-    maxJumpHeight = 200;
+    maxJumpHeight = 240;
     isJumping = false;
     isFalling = false;
+    isDead = false;
 }
 
 GameObject::~GameObject()
@@ -33,19 +36,19 @@ void GameObject::changeTexture(const char* path)
 void GameObject::Update()
 {
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-    if (currentKeyStates[SDL_SCANCODE_LEFT]) {
+    if (currentKeyStates[SDL_SCANCODE_A]) {
         xPos -= speed;
         if (xPos < 0) {
             xPos = 0;
         }
     }
-    if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
+    if (currentKeyStates[SDL_SCANCODE_D]) {
         xPos += speed;
         if (xPos + PLAYER_WIDTH > WINDOW_WIDTH) {
             xPos = WINDOW_WIDTH - PLAYER_WIDTH;
         }
     }
-    if (isFalling == false && (currentKeyStates[SDL_SCANCODE_UP]) && isJumping == false) {
+    if (isFalling == false && (currentKeyStates[SDL_SCANCODE_W]) && isJumping == false) {
         yVelocity = -jumpForce;
         isJumping = true;
     }
@@ -81,19 +84,19 @@ void GameObject::Update()
 void GameObject::Update2()
 {
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-    if (currentKeyStates[SDL_SCANCODE_A] != NULL) {
+    if (currentKeyStates[SDL_SCANCODE_LEFT] != NULL) {
         xPos -= speed;
         if (xPos < 0) {
             xPos = 0;
         }
     }
-    if (currentKeyStates[SDL_SCANCODE_D] != NULL) {
+    if (currentKeyStates[SDL_SCANCODE_RIGHT] != NULL) {
         xPos += speed;
         if (xPos + destRect.w > WINDOW_WIDTH) {
             xPos = WINDOW_WIDTH - PLAYER_WIDTH;
         }
     }
-    if (isFalling == false && (currentKeyStates[SDL_SCANCODE_W]) && isJumping == false) {
+    if (isFalling == false && (currentKeyStates[SDL_SCANCODE_UP]) && isJumping == false) {
         yVelocity = -jumpForce;
         isJumping = true;
     }

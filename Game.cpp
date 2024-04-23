@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "GameObject.h"
 #include <random>
+#include <cstring>
 
 GameObject* player;
 GameObject* player2;
@@ -12,8 +13,10 @@ Uint32 lose_Time = 0;
 static bool difficulty_clicked = false;
 static bool paused = false;
 static bool start_clicked = false;
+static bool tutorial_clicked = false;
 static int mode = 1;
 std::vector<Explosion*> explosions;
+int winner;
 
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -98,8 +101,22 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		printf("SDL_ttf could not be opened! Error: %s\n", TTF_GetError());
 		return;
 	}
+	//load font
 	gFont24 = TTF_OpenFont("OpenSans-Bold.ttf", 24);
 	gFont48 = TTF_OpenFont("OpenSans-Bold.ttf", 48);
+	//load sound
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+	clickingSound = Mix_LoadWAV("sound/clicking.wav");
+	eatingSound = Mix_LoadWAV("sound/eating.wav");
+	background_music = Mix_LoadWAV("sound/background_music.wav");
+	game_play_music = Mix_LoadWAV("sound/game_play_music.wav");
+	Mix_PlayChannel(2, background_music, -1);
+}
+
+void Game::first_spawn() {
+	spawnFruits();
+	spawnEnemies();
+	spawnPoisions();
 }
 
 void Game::spawnFruits()
@@ -123,6 +140,18 @@ void Game::spawnFruits()
 		int randomX = 40 + rand() % (WINDOW_WIDTH - 80);
 		fruits.push_back(new Fruit(fruit_type.c_str(), randomX, 0));
 	}
+}
+
+void Game::spawnHP() {
+	int randomX = 40 + rand() % (WINDOW_WIDTH - 80);
+	fruits.push_back(new Fruit("img/hp.png", randomX, 0));
+	fruits.back()->is_HP = true;
+}
+
+void Game::spawnShield() {
+	int randomX = 40 + rand() % (WINDOW_WIDTH - 80);
+	fruits.push_back(new Fruit("img/shield.png", randomX, 0));
+	fruits.back()->is_Shield = true;
 }
 
 void Game::spawnPoisions()
@@ -158,55 +187,72 @@ void Game::handleEvent()
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 		std::cout << x << "  " <<  y << std::endl;
-		if (x > 250 && x < 540 && y > 90 && y < 200 && !start_clicked && !difficulty_clicked && !paused) {
+		if (x > 250 && x < 540 && y > 90 && y < 200 && !start_clicked && !difficulty_clicked && !paused && !tutorial_clicked) {
+			Mix_PlayChannel(1, clickingSound, 0);
 			loadBackground("img/background_play_mode.jpg");
 			start_clicked = true;
 			if (mode == 1) {
-				MAX_ENEMY_NUMBERS = 4;
+				MAX_ENEMY_NUMBERS = 5;
 				MAX_SPEED = 7;
 			}
 			else if (mode == 2) {
-				MAX_ENEMY_NUMBERS = 6;
+				MAX_ENEMY_NUMBERS = 7;
 				MAX_SPEED = 7;
 				std::cout << "MODE: " << 2 << std::endl;
 			}
 		}
-		else if (x > 250 && x < 540 && y > 400 && y < 525 && !difficulty_clicked && !paused && !start_clicked) {
+		else if (x > 250 && x < 540 && y > 240 && y < 340 && !difficulty_clicked && !paused && !start_clicked && !tutorial_clicked) {
+			Mix_PlayChannel(1, clickingSound, 0);
+			loadBackground("img/tutorial.jpg");
+			tutorial_clicked = true;
+		}
+		else if (x > 250 && x < 540 && y > 400 && y < 525 && !difficulty_clicked && !paused && !start_clicked && !tutorial_clicked) {
+			Mix_PlayChannel(1, clickingSound, 0);
 			loadBackground("img/difficulty.jpg");
 			difficulty_clicked = true;
 		}
 		else if (x > 250 && x < 540 && y > 550 && y < 650 && !difficulty_clicked && !paused && !start_clicked) {
+			Mix_PlayChannel(1, clickingSound, 0);
 			isRunning = false;
 		}
-		else if (difficulty_clicked && !paused) {
+		else if (difficulty_clicked) {
 			if (x > 220 && x < 560 && y > 190 && y < 300) {
+				Mix_PlayChannel(1, clickingSound, 0);
 				mode = 1;
 				loadBackground("img/background_menu.jpg");
 				difficulty_clicked = false;
 			}
 			else if (x > 220 && x < 560 && y > 420 && y < 530) {
+				Mix_PlayChannel(1, clickingSound, 0);
 				mode = 2;
 				loadBackground("img/background_menu.jpg");
 				difficulty_clicked = false;
 			}
 			else if (x > 10 && x < 85 && y > 10 && y < 75) {
+				Mix_PlayChannel(1, clickingSound, 0);
 				difficulty_clicked = false;
 				loadBackground("img/background_menu.jpg");
 			}
 		}
-		else if (paused && !isPlaying) {
+		else if (paused) {
 			if (x > 250 && x < 520 && y > 150 && y < 250) {
+				Mix_PlayChannel(1, clickingSound, 0);
+				Mix_PlayChannel(2, game_play_music, -1);
 				isPlaying = true;
 				loadBackground("img/background1.png");
 				paused = false;
 			}
 			else if (x > 250 && x < 520 && y > 330 && y < 430) {
+				Mix_PlayChannel(1, clickingSound, 0);
 				end_game();
+				Mix_PlayChannel(2, game_play_music, -1);
+				reset_time();
 				paused = false;
 				loadBackground("img/background1.png");
 				isPlaying = true;
 			}
 			else if (x > 270 && x < 500 && y > 530 && y < 620) {
+				Mix_PlayChannel(1, clickingSound, 0);
 				//lose = true;
 				end_game();
 				isPlaying = false;
@@ -214,31 +260,46 @@ void Game::handleEvent()
 				paused = false;
 			}
 		}
-		else if (!isPlaying && start_clicked && !difficulty_clicked && !paused) {
+		else if (start_clicked) {
 			if (x > 230 && x < 570 && y > 180 && y < 300) {
+				Mix_PlayChannel(1, clickingSound, 0);
+				Mix_PlayChannel(2, game_play_music, -1);
 				isPlaying = true;
 				loadBackground("img/background1.png");
 				number_of_player = 1;
 				player = new GameObject("img/frog1.png", WINDOW_WIDTH / 2 - PLAYER_WIDTH - 30, WINDOW_HEIGHT - PLAYER_HEIGHT);
 				player2 = NULL;
 				start_clicked = false;
+				reset_time();
 			}
 			else if (x > 230 && x < 560 && y > 400 && y < 520) {
+				Mix_PlayChannel(1, clickingSound, 0);
+				Mix_PlayChannel(2, game_play_music, -1);
 				isPlaying = true;
 				loadBackground("img/background1.png");
 				number_of_player = 2;
 				player = new GameObject("img/frog1.png", WINDOW_WIDTH / 2 - PLAYER_WIDTH - 30, WINDOW_HEIGHT - PLAYER_HEIGHT);
 				player2 = new GameObject("img/frog2.png", WINDOW_WIDTH / 2 - PLAYER_WIDTH + 30, WINDOW_HEIGHT - PLAYER_HEIGHT);
 				start_clicked = false;
+				reset_time();
 			}
 			else if (x > 10 && x < 60 && y > 10 && y < 70) {
+				Mix_PlayChannel(1, clickingSound, 0);
 				loadBackground("img/background_menu.jpg");
 				start_clicked = false;
+			}
+		}
+		else if (tutorial_clicked) {
+			if(x > 15 && x < 85 && y > 10 && y < 85){
+				Mix_PlayChannel(1, clickingSound, 0);
+				loadBackground("img/background_menu.jpg");
+				tutorial_clicked = false;
 			}
 		}
 		break;
 	case SDL_KEYDOWN:
 		if (isPlaying && event.key.keysym.sym == SDLK_ESCAPE) {
+			Mix_PlayChannel(2, background_music, -1);
 			loadBackground("img/resume.jpg");
 			paused = true;
 			isPlaying = false;
@@ -247,48 +308,86 @@ void Game::handleEvent()
 	default:
 		break;
 	}
-	SDL_Delay(5);
+	//SDL_Delay(5);
+}
+
+void Game::reset_time(){
+	lastFruits_SpawnTime = std::chrono::steady_clock::now();
+	lastPosions_SpawnTime = std::chrono::steady_clock::now();
+	lastEnemy_SpawnTime = std::chrono::steady_clock::now();
+	lastHP_SpawnTime = std::chrono::steady_clock::now();
+	lastShield_SpawnTime = std::chrono::steady_clock::now();
 }
 
 void Game::update()
 {
+	if (!first_spawned) {
+		first_spawn();
+		first_spawned = true;
+	}
 	//Spawn a new enemy every 6 seconds until number of enemies are max = MAX_ENEMY
-	if (isPlaying && number_of_enemy < MAX_ENEMY_NUMBERS && std::chrono::steady_clock::now() - lastEnemySpawnTime >= std::chrono::seconds(6))
+	if (isPlaying && number_of_enemy < MAX_ENEMY_NUMBERS && std::chrono::steady_clock::now() - lastEnemy_SpawnTime >= std::chrono::seconds(6))
 	{
 		spawnEnemies();
-		lastEnemySpawnTime = std::chrono::steady_clock::now();
+		lastEnemy_SpawnTime = std::chrono::steady_clock::now();
 	}
-	//spawn fruits every 4 second
-	if (isPlaying && SDL_GetTicks() - startTime >= 4000) {
+	//spawn fruits every 6 second
+	if (isPlaying && std::chrono::steady_clock::now() - lastFruits_SpawnTime >= std::chrono::seconds(6)) {
 		spawnFruits();
-		startTime = SDL_GetTicks();
+		lastFruits_SpawnTime = std::chrono::steady_clock::now();
 	}
-	if (isPlaying && SDL_GetTicks() - startTime2 >= 5000) {
+	if (isPlaying && std::chrono::steady_clock::now() - lastPosions_SpawnTime >= std::chrono::seconds(8)) {
 		spawnPoisions();
-		startTime2 = SDL_GetTicks();
+		lastPosions_SpawnTime = std::chrono::steady_clock::now();
+	}
+	if (isPlaying && std::chrono::steady_clock::now() - lastHP_SpawnTime >= std::chrono::seconds(20)) {
+		spawnHP();
+		
+		lastHP_SpawnTime = std::chrono::steady_clock::now();
+	}
+	if (isPlaying && std::chrono::steady_clock::now() - lastShield_SpawnTime >= std::chrono::seconds(15)) {
+		spawnShield();
+		lastShield_SpawnTime = std::chrono::steady_clock::now();
 	}
 	if (player != NULL)	player->Update();
 	if (player2 != NULL) player2->Update2();
 
 	for (auto it = fruits.begin(); it != fruits.end();) {
-		if (player != NULL) {
+		if (!player->isDead) {
 			if ((*it)->checkCollision(player->getXpos(), player->getYpos(), player->getWidth(), player->getHeight())) {
+				if ((*it)->is_HP)	player->hp++;
+				else if ((*it)->is_Shield) {
+					player->Protected = true;
+					player->bonusHP = 3;
+					player->protecting_start_time = std::chrono::steady_clock::now();
+				}
+				else {
+					cnt1++;
+				}
 				eatingStartTime = SDL_GetTicks();
 				player->isEating = true;
 				//Delete fruit if collide and keep update the following fruits;
 				it = fruits.erase(it);
-				cnt1++;
+				
 				std::cout << "Score 1: " << cnt1 << std::endl;
 				break;
 			}
 		}
-		if (player2 != NULL) {
+		if (player2 != NULL && !player2->isDead) {
 			if ((*it)->checkCollision(player2->getXpos(), player2->getYpos(), player2->getWidth(), player2->getHeight())) {
+				if ((*it)->is_HP)	player2->hp++;
+				else if ((*it)->is_Shield) {
+					player2->Protected = true;
+					player2->bonusHP = 3;
+					player2->protecting_start_time = std::chrono::steady_clock::now();
+				}
+				else {
+					cnt2++;
+				}
 				eatingStartTime2 = SDL_GetTicks();
 				player2->isEating = true;
 				//Delete fruit if collide and keep update the following fruits;
 				it = fruits.erase(it);
-				cnt2++;
 				std::cout << "Score 2: " << cnt2 << std::endl;
 				break;
 			}
@@ -303,34 +402,42 @@ void Game::update()
 	}
 
 	for (auto it = poisions.begin(); it != poisions.end();) {
-		if (player != NULL) {
+		if (!player->isDead) {
 			if ((*it)->checkCollision(player->getXpos(), player->getYpos(), player->getWidth(), player->getHeight())) {
 				explosions.push_back(new Explosion(player->getXpos() - 30, player->getYpos() - 30));
+				if (player->Protected) {
+					player->bonusHP--;
+				}
+				else {
+					player->hp--;
+				}
 				number_of_enemy--;
-				(player->hp)--;
 				it = poisions.erase(it);
 				if (player->hp == 0) {
-					player = NULL;
+					player->isDead = true;
 				}
-				//continue;
 				break;
 			}
 		}
 
-		if (player2 != NULL) {
+		if (player2 != NULL && !player2->isDead) {
 			if ((*it)->checkCollision(player2->getXpos(), player2->getYpos(), player2->getWidth(), player2->getHeight())) {
 				explosions.push_back(new Explosion(player2->getXpos() - 30, player2->getYpos() - 30));
+				if (player2->Protected) {
+					player2->bonusHP--;
+				}
+				else {
+					player2->hp--;
+				}
 				number_of_enemy--;
-				(player2->hp)--;
 				it = poisions.erase(it);
 				if ((player2->hp) == 0) {
-					player2 = NULL;
+					player2->isDead = true;
 				}
-				//continue;
 				break;
 			}
 		}
-		if (player == NULL && player2 == NULL) {
+		if (player->isDead && (player2 == NULL || player2->isDead)) {
 			lose = true;
 			end_game();
 			break;
@@ -373,36 +480,55 @@ void Game::update()
 		}
 	}
 	for (auto it = enemies.begin(); it != enemies.end();) {
-		if (player != NULL) {
+		if (!player->isDead) {
 			if ((*it)->checkCollision(player->getXpos(), player->getYpos(), player->getWidth(), player->getHeight())) {
 				explosions.push_back(new Explosion(player->getXpos() - 30, player->getYpos() - 30));
+				if (player->Protected) {
+					player->bonusHP--;
+				}
+				else {
+					player->hp--;
+				}
 				number_of_enemy--;
-				(player->hp)--;
 				it = enemies.erase(it);
 				if (player->hp == 0) {
-					player = NULL;
+					player->isDead = true;
 				}
-				lastEnemySpawnTime = std::chrono::steady_clock::now();
 				//continue;
+				lastEnemy_SpawnTime = std::chrono::steady_clock::now();
 				break;
 			}
 		}
 		
-		if (player2 != NULL) {
+		if (player2 != NULL && !player2->isDead) {
 			if ((*it)->checkCollision(player2->getXpos(), player2->getYpos(), player2->getWidth(), player2->getHeight())) {
 				explosions.push_back(new Explosion(player2->getXpos() - 30, player2->getYpos() - 30));
+				if (player2->Protected) {
+					(player2->bonusHP)--;
+				}
+				else {
+					(player2->hp)--;
+				}
 				number_of_enemy--;
-				(player2->hp)--;
 				it = enemies.erase(it);
 				if ((player2->hp) == 0) {
-					player2 = NULL;
+					player2->isDead = true;
 				}
-				lastEnemySpawnTime = std::chrono::steady_clock::now();
 				//continue;
+				lastEnemy_SpawnTime = std::chrono::steady_clock::now();
 				break;
 			}
 		}
-		if (player == NULL && player2 == NULL) {
+
+		if (std::chrono::steady_clock::now() - player->protecting_start_time >= std::chrono::seconds(5) || player->bonusHP == 0)
+			player->Protected = false;
+
+		if (player2 != NULL && !player2->isDead) {
+			if (std::chrono::steady_clock::now() - player2->protecting_start_time >= std::chrono::seconds(5) || player2->bonusHP == 0)
+				player2->Protected = false;
+		}
+		
+		if (player->isDead && ((player2 != NULL && player2->isDead) || player2 == NULL)) {
 			lose = true;
 			end_game();
 			break;
@@ -414,15 +540,21 @@ void Game::update()
 }
 
 void Game::end_game() {
+	Mix_PlayChannel(2, background_music, -1);
 	fruits.clear();
 	enemies.clear();
 	poisions.clear();
 	explosions.clear();
 	number_of_enemy = 0;
+	winner = 0;
 	isPlaying = false;
 	isPlaying = false;
 	score1 = cnt1;
 	score2 = cnt2;
+	first_spawned = false;
+	if (cnt1 > cnt2)	winner = 1;
+	else if (cnt1 < cnt2)	winner = 2;
+	else winner = 0;
 	cnt1 = 0;
 	cnt2 = 0;
 	player = new GameObject("img/frog1.png", WINDOW_WIDTH / 2 - PLAYER_WIDTH - 30, WINDOW_HEIGHT - PLAYER_HEIGHT);
@@ -438,15 +570,28 @@ void Game::render()
 		loadBackground("img/background_exit.jpg");
 		if (number_of_player == 1) {
 			renderText("Your score: ", WINDOW_WIDTH / 2 - 250, 280, gFont48);
-			std::cout << "succeded\n";
+			//std::cout << "succeded\n";
 			renderText(std::to_string(score1), WINDOW_WIDTH / 2 + 20, 280, gFont48);
 		}
 		else {
-			renderText("Winner: ", WINDOW_WIDTH / 2 - 250, 250, gFont48);
+			if (winner == 1) {
+				renderText("Winner: ", WINDOW_WIDTH / 2 - 250, 280, gFont48);
+				SDL_Rect dest = { WINDOW_WIDTH / 2, 280, PLAYER_WIDTH, PLAYER_HEIGHT};
+				SDL_RenderCopy(Game::renderer, TextureManager::LoadTexture("img/frog1.png"), NULL, &dest);
+			}
+			else if (winner == 2) {
+				renderText("Winner: ", WINDOW_WIDTH / 2 - 250, 280, gFont48);
+				SDL_Rect dest = { WINDOW_WIDTH / 2, 280, PLAYER_WIDTH, PLAYER_HEIGHT };
+				SDL_RenderCopy(Game::renderer, TextureManager::LoadTexture("img/frog2.png"), NULL, &dest);
+			}
+			else {
+				renderText("Draw", WINDOW_WIDTH / 2 - 200, 280, gFont48);
+			}
+			
 			//std::cout << "succeded\n";
-			renderText("Player 1: ", WINDOW_WIDTH / 2 - 250, 350, gFont48);
+			renderText("Player 2: ", WINDOW_WIDTH / 2 - 250, 350, gFont48);
 			renderText(std::to_string(score1), WINDOW_WIDTH / 2 + 20, 350, gFont48);
-			renderText("Player 2: ", WINDOW_WIDTH / 2 - 250, 450, gFont48);
+			renderText("Player 1: ", WINDOW_WIDTH / 2 - 250, 450, gFont48);
 			renderText(std::to_string(score2), WINDOW_WIDTH / 2 + 20, 450, gFont48);
 		}
 
@@ -464,8 +609,8 @@ void Game::render()
 		}
 	}
 	if (isPlaying) {
-		if(player != NULL)	player->Render();
-		if(player2 != NULL)	player2->Render();
+		if(!player->isDead)	player->Render();
+		if(player2 != NULL && !player2->isDead)	player2->Render();
 		for (auto& enemy : enemies) {
 			enemy->Render();
 		}
@@ -489,15 +634,22 @@ void Game::render()
 		renderText("Player 1: ", 10, 10, gFont24);
 		renderText(std::to_string(cnt1), 120, 10, gFont24);
 		renderText("HP 1: ", 10, 40, gFont24);
-		if(player != NULL)	renderText(std::to_string(player->hp), 80, 40, gFont24);
+		renderText(std::to_string(player->hp), 80, 40, gFont24);
+		if (player->Protected && player->bonusHP != 0) {
+			SDL_Rect dest = { 10, 70, 42, 46 };
+			SDL_RenderCopy(Game::renderer, TextureManager::LoadTexture("img/shield.png"), NULL, &dest);
+		}
 
 		if (player2 != NULL) {
 			renderText("Player 2: ", WINDOW_WIDTH - 160, 10, gFont24);
 			renderText(std::to_string(cnt2), WINDOW_WIDTH - 50, 10, gFont24);
 			renderText("HP 2: ", WINDOW_WIDTH - 160, 40, gFont24);
-			if (player2 != NULL)	renderText(std::to_string(player2->hp), WINDOW_WIDTH - 90, 40, gFont24);
+			renderText(std::to_string(player2->hp), WINDOW_WIDTH - 90, 40, gFont24);
+			if (player2->Protected && player2->bonusHP != 0) {
+				SDL_Rect dest = { WINDOW_WIDTH - 160, 70, 42, 46 };
+				SDL_RenderCopy(Game::renderer, TextureManager::LoadTexture("img/shield.png"), NULL, &dest);
+			}
 		}
-
 	}
 	SDL_RenderPresent(renderer);
 }

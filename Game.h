@@ -15,10 +15,14 @@
 
 const int WINDOW_HEIGHT = 780;
 const int WINDOW_WIDTH = 780;
-//static bool isEating = false;
 static bool lose = false;
 static int MAX_ENEMY_NUMBERS = 4;
 static int MAX_SPEED = 7;
+static Mix_Chunk* clickingSound;
+static Mix_Chunk* eatingSound;
+static Mix_Chunk* background_music;
+static Mix_Chunk* game_play_music;
+
 
 class Enemy;
 
@@ -44,6 +48,10 @@ public:
 	void spawnFruits();
 	void spawnEnemies();
 	void spawnPoisions();
+	void spawnHP();
+	void spawnShield();
+	void first_spawn();
+	void reset_time();
 
 	void end_game();
 	static	SDL_Renderer* renderer;
@@ -53,6 +61,7 @@ private:
 	bool isRunning;
 	bool isPlaying;
 	int number_of_player = 1;
+	bool first_spawned = false;
 	SDL_Window* window;
 	SDL_Texture* backgroundTexture;
 
@@ -67,5 +76,10 @@ private:
 	Uint32 startTime2 = 0;
 
 	int number_of_enemy = 0;
-	std::chrono::steady_clock::time_point lastEnemySpawnTime;
+	std::chrono::steady_clock::time_point lastEnemy_SpawnTime;
+	std::chrono::steady_clock::time_point lastFruits_SpawnTime;
+	std::chrono::steady_clock::time_point lastPosions_SpawnTime;
+	std::chrono::steady_clock::time_point lastHP_SpawnTime;
+	std::chrono::steady_clock::time_point lastShield_SpawnTime;
+	int protecting_time;
 };
