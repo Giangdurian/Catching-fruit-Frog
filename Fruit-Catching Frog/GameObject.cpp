@@ -13,7 +13,7 @@ GameObject::GameObject(const char* texturesheet, int x, int y)
     destRect.w = PLAYER_WIDTH;
     destRect.h = PLAYER_HEIGHT;
     speed = 5;
-    //
+    //////
     hp = 3;
     Protected = false;
     bonusHP = 3;
