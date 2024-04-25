@@ -1,11 +1,2 @@
-﻿  Enemy.cpp
-  Explosion.cpp
-  Fruit.cpp
-  Game.cpp
-  GameObject.cpp
-  Poision.cpp
-  TextureManager.cpp
-  main.cpp
-C:\Users\ACER\OneDrive - vnu.edu.vn\Documents\Fruit-Catching Frog\Fruit-Catching Frog\Fruit-Catching Frog\main.cpp(7,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Generating Code...
+﻿  GameObject.cpp
   Fruit-Catching Frog.vcxproj -> C:\Users\ACER\OneDrive - vnu.edu.vn\Documents\Fruit-Catching Frog\Fruit-Catching Frog\x64\Debug\Fruit-Catching Frog.exe
