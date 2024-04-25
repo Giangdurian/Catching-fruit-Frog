@@ -16,7 +16,7 @@
 const int WINDOW_HEIGHT = 780;
 const int WINDOW_WIDTH = 780;
 static bool lose = false;
-static int MAX_ENEMY_NUMBERS = 4;
+static int MAX_ENEMY_NUMBERS = 5;
 static int MAX_SPEED = 7;
 static Mix_Chunk* clickingSound;
 static Mix_Chunk* eatingSound;
@@ -76,7 +76,7 @@ private:
 	std::vector<Enemy*> enemies;
 	std::vector<Fruit*> fruits;
 	std::vector<Poision*> poisions;
-	
+
 
 
 	Uint32 startTime = 0;

@@ -29,7 +29,7 @@ void Enemy::Update()
 	{
 		do {
 			speedX = -(speedX + rand() % 7 - 3);
-		} while (speedX < -6 || speedX > 6 || (speedX < 2  && speedX > -2));
+		} while (speedX < -6 || speedX > 6 || (speedX < 2 && speedX > -2));
 
 		if (xPos <= 0) {
 			xPos = 0;
@@ -44,8 +44,8 @@ void Enemy::Update()
 		do {
 			speedY = -(speedY + rand() % 7 - 3);
 		} while (speedY < -6 || speedY > 6 || (speedY < 2 && speedY > -2));
-		
-		
+
+
 		if (yPos <= 0) {
 			yPos = 0;
 		}
