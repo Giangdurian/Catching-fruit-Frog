@@ -41,8 +41,6 @@ Lưu ý: Tải phiên bản Community 2022.
 **Bước 2:** Clone repo này về bằng lệnh git clone link .git của repo. Hoặc Chọn Code -> Download Zip
 
 
-![image](resources/preview/download.png)
-
 
 Giải nén code ra 1 Folder và mở File Fruit-Catching Frog.sln
 
