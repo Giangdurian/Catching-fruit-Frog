@@ -14,9 +14,8 @@ Link video demo: https://youtu.be/rpZYZXRb4rc
 - [3. Các nhân vật, enemy và items của game.](#3Các-nhân-vật,-enemy-và-items-của-game.)
 - [4. Hướng dẫn chơi game](#4-hướng-dẫn-chơi-game)
 - [5. Source code](#5-source-code)
-- [6. Nguồn tham khảo và tài liệu](#6-nguồn-tham-khảo-và-tài-liệu:)
-- [7. Lời kết](#7-lời-kết:)
-   
+- [6. Nguồn tham khảo và tài liệu](#6-nguồn-tham-khảo-và-tài-liệu)
+- [7. Lời kết](#7-lời-kết)
 
 
 # 1. Cách tải game
@@ -72,7 +71,7 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
     
 <div style="text-align: center;">
 
-![image](img_for_md/difficulty.jpg)
+![image](img_for_md/background_play_mode.jpg)
 
 
 </div>
@@ -166,7 +165,7 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
 
 <div style="text-align: center;">
 
-![image](img_for_md/gameplay.png)
+![image](img_for_md/resume.png)
 
 </div>
 
@@ -212,6 +211,8 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
         * Cập nhật trạng thái trò chơi: Nếu trò chơi đang ở trạng thái đang chơi (playing() trả về true), thì hàm update() được gọi để cập nhật trạng thái của trò chơi.
         * Vẽ trạng thái hiện tại của trò chơi lên màn hình: Hàm render()
         * Đảm bảo tần số khung hình (FPS): Đoạn code này đảm bảo rằng trò chơi chạy với tần số khung hình (FPS) nhất định bằng cách chờ một lượng thời gian sau mỗi khung hình.
+
+
 # 6. Nguồn tham khảo và tài liệu
 
 - Tham khảo: những phần căn bản về SDL cũng như cách xây dựng khung chương trình mình chủ yếu học từ Channel youtube [Let's Make Game](https://www.youtube.com/@CarlBirch). Bên cạnh đó, mình cũng tham khảo các nguồn tài liệu và tutorial trên [Lazyfoo](https://lazyfoo.net/tutorials/SDL/index.php) và nhiều repo github game khác.
@@ -233,3 +234,10 @@ Qua project em đã học thêm được được:
  - cách sử dụng thư viện đồ họa SDL
  - cách quản lý mã nguồn trên github
  - hiểu sâu hơn về kiểu dữ liệu hướng đối tượng(OOP)
+
+
+
+
+
+
+
