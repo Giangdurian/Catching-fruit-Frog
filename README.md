@@ -119,7 +119,7 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
         - Cherry  ![image](img_for_md/cherry.png)
         - Chuối (Banana)  ![image](img_for_md/banana.png)
         - Táo (Apple)  ![image](img_for_md/apple.png)
-        - Dâu tây (Stawberry)  ![image](img_for_md/strawberry.png)
+        - Dâu tây (Strawberry)  ![image](img_for_md/strawberry.png)
 
     - Item hỗ trợ:
     
@@ -127,7 +127,7 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
         | Tên  | Hình ảnh  | Tính năng |
         | :------------ |:---------------:| :-----|
         | Tim(HP)       | ![image](img_for_md/hp.png) |Cộng thêm 1 mạng cho người chơi ăn được |
-        | Khiên(Shield) | ![image](img_for_md/poision.png) | Bảo vệ người chơi khỏi ba enemy bất kì trong vòng 5 giây   |
+        | Khiên(Shield) | ![image](img_for_md/shield.png) | Bảo vệ người chơi khỏi ba enemy bất kì trong vòng 5 giây   |
 
 
 - Enemy:
