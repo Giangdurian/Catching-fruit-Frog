@@ -134,6 +134,12 @@ Các enemy:
 
     - Trong chế độ single player, người chơi (player 1) sẽ sử dụng các phím A, W, D để điều khiển nhân vật của mình. Sử dụng phím A để di chuyển sang trái, phím D để di chuyển sang phải, và phím W để nhảy lên. Nhiệm vụ của người chơi là điều khiển nhân vật di chuyển để ăn quả, các items và tránh né các kẻ thù để sống lâu nhất có thể. Trò chơi kết thúc khi player hết số mạng (HP1 = 0).
     - Trong chế độ multiple players, player 1 vẫn sử dụng các phím A, W, D như trong chế độ single, trong khi player 2 sẽ sử dụng các phím mũi tên (↑, ←, →) để điều khiển nhân vật của mình. Trò chơi kết thúc khi cả hai player đều hết số mạng.
+    
+<div style="text-align: center;">
+
+![image](img_for_md/gameplay.png)
+
+</div>
 - Khi trò chơi kết thúc, điểm số của từng người chơi sẽ được hiển thị. Lưu ý: Trong chế độ chơi hai người, kết quả sẽ xác định người chiến thắng. Nếu hai người chơi có số điểm bằng nhau, kết quả sẽ là Draw (Hòa); nếu điểm số của hai player khác nhau, người có điểm số cao hơn sẽ chiến thắng (winner) và player đó sẽ được hiển thị trên màn hình.
 
 
