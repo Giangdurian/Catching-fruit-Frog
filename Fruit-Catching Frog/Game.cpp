@@ -113,6 +113,10 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	Mix_VolumeChunk(background_music, MIX_MAX_VOLUME / 3);
 	Mix_VolumeChunk(game_play_music, MIX_MAX_VOLUME / 3);
 	Mix_PlayChannel(2, background_music, -1);
+	//
+	MAX_ENEMY_NUMBERS = 5;
+	MAX_ENEMY_SPEED = 3;
+	MAX_ENEMY_SPEED = 6;
 }
 
 void Game::first_spawn() {
@@ -171,7 +175,7 @@ void Game::spawnEnemies()
 {
 	int randomX = rand() % (WINDOW_WIDTH - 40);
 
-	enemies.push_back(new Enemy("img/bom.png", randomX, 0, MAX_SPEED));
+	enemies.push_back(new Enemy("img/bom.png", randomX, 0, MAX_ENEMY_SPEED, MIN_ENEMY_SPEED));
 	number_of_enemy++;
 }
 
@@ -195,12 +199,15 @@ void Game::handleEvent()
 			start_clicked = true;
 			if (mode == 1) {
 				MAX_ENEMY_NUMBERS = 5;
-				MAX_SPEED = 7;
+				MAX_ENEMY_SPEED = 6;
+				MIN_ENEMY_SPEED = 3;
+				std::cout << "speed: " << MAX_ENEMY_SPEED << std::endl;
 			}
 			else if (mode == 2) {
 				MAX_ENEMY_NUMBERS = 7;
-				MAX_SPEED = 7;
-				std::cout << "MODE: " << 2 << std::endl;
+				MAX_ENEMY_SPEED = 8;
+				MIN_ENEMY_SPEED = 5;
+				std::cout << "speed: " << MAX_ENEMY_SPEED << std::endl;
 			}
 		}
 		else if (x > 250 && x < 540 && y > 240 && y < 340 && !difficulty_clicked && !paused && !start_clicked && !tutorial_clicked) {
@@ -337,6 +344,7 @@ void Game::update()
 	//Spawn a new enemy every 6 seconds until number of enemies are max = MAX_ENEMY
 	if (isPlaying && number_of_enemy < MAX_ENEMY_NUMBERS && std::chrono::steady_clock::now() - lastEnemy_SpawnTime >= std::chrono::seconds(6))
 	{
+		std::cout << MAX_ENEMY_NUMBERS << std::endl;
 		spawnEnemies();
 		lastEnemy_SpawnTime = std::chrono::steady_clock::now();
 	}
@@ -429,7 +437,6 @@ void Game::update()
 				else {
 					player->hp--;
 				}
-				number_of_enemy--;
 				it = poisions.erase(it);
 				if (player->hp == 0) {
 					player->isDead = true;
@@ -448,7 +455,6 @@ void Game::update()
 				else {
 					player2->hp--;
 				}
-				number_of_enemy--;
 				it = poisions.erase(it);
 				if ((player2->hp) == 0) {
 					player2->isDead = true;
@@ -555,7 +561,7 @@ void Game::update()
 			break;
 		}
 		else if ((*it) != NULL) {
-			(*it)->Update();
+			(*it)->Update(MAX_ENEMY_SPEED, MIN_ENEMY_SPEED);
 			it++;
 		}
 	}
@@ -700,7 +706,7 @@ void Game::clean() {
 	Mix_FreeChunk(explosionSound);
 	Mix_FreeChunk(healSound);
 	Mix_FreeChunk(shieldSound);
-	SDL_DestroyWindow(Game::window);
+	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 	std::cout << "Game Clean!\n";

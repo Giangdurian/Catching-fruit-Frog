@@ -16,8 +16,9 @@
 const int WINDOW_HEIGHT = 780;
 const int WINDOW_WIDTH = 780;
 static bool lose = false;
-static int MAX_ENEMY_NUMBERS = 5;
-static int MAX_SPEED = 7;
+static int MAX_ENEMY_NUMBERS;
+static int MAX_ENEMY_SPEED;
+static int MIN_ENEMY_SPEED;
 static Mix_Chunk* clickingSound;
 static Mix_Chunk* eatingSound;
 static Mix_Chunk* background_music;

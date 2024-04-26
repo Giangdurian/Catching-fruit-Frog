@@ -3,16 +3,20 @@
 #include <stdlib.h>
 #include <ctime>
 
-Enemy::Enemy(const char* path, int x, int y, int MAX_SPEED)
+Enemy::Enemy(const char* path, int x, int y, int MaxV, int MinV)
 {
 	enemyTexture = TextureManager::LoadTexture(path);
 	xPos = x;
 	yPos = y;
-	do {
-		speedX = rand() % MAX_SPEED - 3;
-		speedY = rand() % MAX_SPEED - 3;
-	} while ((speedX <= 2 && speedX >= -2) || (speedY <= 2 && speedY >= -2));
-
+	
+	speedX = rand() % (MaxV - MinV + 1) + MinV;
+	speedY = rand() % (MaxV - MinV + 1) + MinV;
+	if (rand() % 2 == 0) {
+		speedX *= -1;
+	}
+	if (rand() % 2 == 0) {
+		speedY *= -1;
+	}
 	destRect.w = ENEMY_SIZE;
 	destRect.h = ENEMY_SIZE;
 }
@@ -20,16 +24,18 @@ Enemy::Enemy(const char* path, int x, int y, int MAX_SPEED)
 Enemy::~Enemy()
 {}
 
-void Enemy::Update()
+void Enemy::Update(int MaxV, int MinV)
 {
 	xPos += speedX;
 	yPos += speedY;
 
 	if (xPos <= 0 || xPos >= WINDOW_WIDTH - destRect.w)
 	{
-		do {
-			speedX = -(speedX + rand() % 7 - 3);
-		} while (speedX < -6 || speedX > 6 || (speedX < 2 && speedX > -2));
+		int tmp = rand() % (MaxV - MinV + 1) + MinV;
+		if (rand() % 2)	speedX = -tmp;
+		else speedX = tmp;
+		
+		
 
 		if (xPos <= 0) {
 			xPos = 0;
@@ -41,10 +47,11 @@ void Enemy::Update()
 
 	if (yPos <= 0 || yPos >= WINDOW_HEIGHT - destRect.h)
 	{
-		do {
-			speedY = -(speedY + rand() % 7 - 3);
-		} while (speedY < -6 || speedY > 6 || (speedY < 2 && speedY > -2));
-
+		//speedY = -speedY;
+		int tmp = rand() % (MaxV - MinV + 1) + MinV;
+		if (rand() % 2)	speedY = -tmp;
+		else speedY = tmp;
+		
 
 		if (yPos <= 0) {
 			yPos = 0;

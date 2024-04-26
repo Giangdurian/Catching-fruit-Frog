@@ -14,7 +14,12 @@ Explosion::Explosion(int x, int y) {
     }
 }
 
-Explosion::~Explosion() {}
+Explosion::~Explosion() {
+    for (SDL_Texture* texture : explosionFrames) {
+        SDL_DestroyTexture(texture);
+    }
+    explosionFrames.clear();
+}
 
 void Explosion::update() {
     if (frameDelay == 0) {

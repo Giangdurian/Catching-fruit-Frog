@@ -4,10 +4,10 @@ int const ENEMY_SIZE = 40;
 
 class Enemy {
 public:
-    Enemy(const char* path, int x, int y, int MAX_SPEED);
+    Enemy(const char* path, int x, int y, int MaxV, int MinV);
     ~Enemy();
 
-    void Update();
+    void Update(int MaxV, int MinV);
     void Render();
     bool checkCollision(int playerX, int playerY, int playerW, int playerH) const;
 

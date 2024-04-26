@@ -1,6 +1,4 @@
 
-
-
 # Giới thiệu game
 
 Trò chơi Fruit-Catching Frog là 1 game về hai chú ếch Pansy và Fluffy. Mục tiêu của 2 cậu là di chuyển khôn khéo để thu thập trái cây và né tránh bom, thuốc độc để đạt điểm cao nhất.
@@ -30,6 +28,12 @@ Có thể mở file Fruit-Catching Frog.exe để chơi luôn.
 
 **Bước 1:** Cài Visual Studio. Bạn có thể cài đặt các phiên bản của Visual Studio tại link sau: https://visualstudio.microsoft.com/. 
 
+<div style="text-align: center;">
+
+![image](img_for_md/VS_2022.png)
+
+</div>
+
 
 Lưu ý: Tải phiên bản Community 2022.
 
@@ -53,8 +57,12 @@ Giải nén code ra 1 Folder và mở File Fruit-Catching Frog.sln
 # 1. Menu game
 Menu gồm có 4 chức năng chính, bao gồm 4 nút:
 
+<div style="text-align: center;">
 
-![image](resources/preview/download.png)
+![image](img_for_md/background_menu.jpg)
+
+</div>
+
 
 
 - PLAY: Khi người chơi click vào nút PLAY, sẽ có hai chế độ:
@@ -68,7 +76,15 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
 - TUTORIAL: Nút tutorial sẽ hiện ra màn hình giới thiệu về game và hướng dẫn người dùng cách chơi game
 
 
+
 - DIFFICULTY: Nút difficulty dùng để chọn mức độ khó của game. Có 2 mức độ là Medium và Hard. Nếu chọn mức độ Hard, số lượng của các enemy sẽ nhiều hơn và vận tốc cũng sẽ nhanh hơn so với mức độ Medium.
+
+<div style="text-align: center;">
+
+![image](img_for_md/difficulty.jpg)
+
+</div>
+
 
 
 - QUIT: Khi click vào nút này, game sẽ dừng và người chơi thoát khỏi chương trình.
@@ -81,33 +97,33 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
 Nhân vật:
 
 
--    Player1 (Pansy) ![image](resources/preview/sun.png) : là nhân vật chú ếch màu đỏ.
+-    Player1 (Pansy) ![image](img_for_md/frog1.png) : là nhân vật chú ếch màu đỏ.
 
 
--    Player2 (Fluffy) ![image](resources/preview/sun.png) : là nhân vật chú ếch màu xanh.
+-    Player2 (Fluffy) ![image](img_for_md/frog2.png) : là nhân vật chú ếch màu xanh.
 
 
 Item:
 
 - Fruit: Là các trái cây được spawn ngẫu nhiên từ phía trên. Các loại quả bao gồm:
 
-    - Dưa hấu(Melon) ![image](resources/preview/sun.png)
-    - Nho (Grape) ![image](resources/preview/sun.png)
-    - Cherry ![image](resources/preview/sun.png)
-    - Chuối (Banana) ![image](resources/preview/sun.png)
-    - Táo (Apple) ![image](resources/preview/sun.png)
-    - Việt quất (Blueberry) ![image](resources/preview/sun.png)
+    - Dưa hấu(Melon) ![image](img_for_md/melon.png)
+    - Nho (Grape) ![image](img_for_md/grape.png)
+    - Cherry ![image](img_for_md/cherry.png)
+    - Chuối (Banana) ![image](img_for_md/banana.png)
+    - Táo (Apple) ![image](img_for_md/apple.png)
+    - Dâu tây (Stawberry) ![image](img_for_md/strawberry.png)
 - Item hỗ trợ:
 
-    - Tim(HP):![image](resources/preview/sun.png) Cộng thêm 1 mạng cho người chơi ăn được
-    - Khiên(Shield):![image](resources/preview/sun.png) Bảo vệ người chơi khỏi ba enemy bất kì trong vòng 5 giây
+    - Tim(HP):![image](img_for_md/hp.png) Cộng thêm 1 mạng cho người chơi ăn được
+    - Khiên(Shield):![image](img_for_md/shield.png) Bảo vệ người chơi khỏi ba enemy bất kì trong vòng 5 giây
 
 
 Các enemy:
 
-- Bombs (Bom) ![image](resources/preview/sun.png): là những trái bom với cách di chuyển va đập với các cạnh của màn hình và bật ra, vận tốc quả bom sẽ thay đổi mỗi lần va chạm vào màn hình nhưng không vượt quá vận tốc giới hạn. Khi dính 1 trái bom, nó sẽ biến mất nhưng nhân vật cũng sẽ mất một mạng.
+- Bombs (Bom) ![image](img_for_md/bom.png): là những trái bom với cách di chuyển va đập với các cạnh của màn hình và bật ra, vận tốc quả bom sẽ thay đổi mỗi lần va chạm vào màn hình nhưng không vượt quá vận tốc giới hạn. Khi dính 1 trái bom, nó sẽ biến mất nhưng nhân vật cũng sẽ mất một mạng.
 
-- Posions (Thuốc độc): Là những bình thuốc độc rơi xuống cùng với các item fruits từ phía trên. Cũng giống như bom, khi người chơi dính thuốc độc, người chơi sẽ mất 1 mạng.
+- Posions (Thuốc độc) ![image](img_for_md/posion.png): Là những bình thuốc độc rơi xuống cùng với các item fruits từ phía trên. Cũng giống như bom, khi người chơi dính thuốc độc, người chơi sẽ mất 1 mạng.
 
 
 
@@ -122,6 +138,12 @@ Các enemy:
     - Trong chế độ multiple players, player 1 vẫn sử dụng các phím A, W, D như trong chế độ single, trong khi player 2 sẽ sử dụng các phím mũi tên (↑, ←, →) để điều khiển nhân vật của mình. Trò chơi kết thúc khi cả hai player đều hết số mạng.
 - Khi trò chơi kết thúc, điểm số của từng người chơi sẽ được hiển thị. Lưu ý: Trong chế độ chơi hai người, kết quả sẽ xác định người chiến thắng. Nếu hai người chơi có số điểm bằng nhau, kết quả sẽ là Draw (Hòa); nếu điểm số của hai player khác nhau, người có điểm số cao hơn sẽ chiến thắng (winner) và player đó sẽ được hiển thị trên màn hình.
 
+
+<div style="text-align: center;">
+
+![image](![image](img_for_md/result.png))
+
+</div>
 
 
 
