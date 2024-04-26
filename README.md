@@ -139,7 +139,7 @@ Các enemy:
 
 <div style="text-align: center;">
 
-![image](![image](img_for_md/result.png))
+![image](img_for_md/result.png)
 
 </div>
 
