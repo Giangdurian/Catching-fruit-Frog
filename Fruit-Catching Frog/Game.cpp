@@ -115,7 +115,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	Mix_PlayChannel(2, background_music, -1);
 	//
 	MAX_ENEMY_NUMBERS = 5;
-	MAX_ENEMY_SPEED = 3;
+	MAX_ENEMY_SPEED = 4;
 	MAX_ENEMY_SPEED = 6;
 }
 
@@ -197,18 +197,6 @@ void Game::handleEvent()
 			Mix_PlayChannel(1, clickingSound, 0);
 			loadBackground("img/background_play_mode.jpg");
 			start_clicked = true;
-			if (mode == 1) {
-				MAX_ENEMY_NUMBERS = 5;
-				MAX_ENEMY_SPEED = 6;
-				MIN_ENEMY_SPEED = 3;
-				std::cout << "speed: " << MAX_ENEMY_SPEED << std::endl;
-			}
-			else if (mode == 2) {
-				MAX_ENEMY_NUMBERS = 7;
-				MAX_ENEMY_SPEED = 8;
-				MIN_ENEMY_SPEED = 5;
-				std::cout << "speed: " << MAX_ENEMY_SPEED << std::endl;
-			}
 		}
 		else if (x > 250 && x < 540 && y > 240 && y < 340 && !difficulty_clicked && !paused && !start_clicked && !tutorial_clicked) {
 			Mix_PlayChannel(1, clickingSound, 0);
@@ -228,12 +216,19 @@ void Game::handleEvent()
 			if (x > 220 && x < 560 && y > 190 && y < 300) {
 				Mix_PlayChannel(1, clickingSound, 0);
 				mode = 1;
+				MAX_ENEMY_NUMBERS = 5;
+				MAX_ENEMY_SPEED = 6;
+				MIN_ENEMY_SPEED = 4;
 				loadBackground("img/background_menu.jpg");
 				difficulty_clicked = false;
 			}
 			else if (x > 220 && x < 560 && y > 420 && y < 530) {
 				Mix_PlayChannel(1, clickingSound, 0);
 				mode = 2;
+				MAX_ENEMY_NUMBERS = 7;
+				MAX_ENEMY_SPEED = 8;
+				MIN_ENEMY_SPEED = 5;
+				std::cout << "speed: " << MAX_ENEMY_SPEED << std::endl;
 				loadBackground("img/background_menu.jpg");
 				difficulty_clicked = false;
 			}
@@ -265,7 +260,6 @@ void Game::handleEvent()
 			}
 			else if (x > 270 && x < 500 && y > 530 && y < 620) {
 				Mix_PlayChannel(1, clickingSound, 0);
-				//lose = true;
 				end_game();
 				isPlaying = false;
 				loadBackground("img/background_menu.jpg");
@@ -699,6 +693,7 @@ void Game::cleanUp()
 
 void Game::clean() {
 	cleanUp();
+	Mix_CloseAudio();
 	Mix_FreeChunk(clickingSound);
 	Mix_FreeChunk(eatingSound);
 	Mix_FreeChunk(background_music);

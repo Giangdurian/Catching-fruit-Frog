@@ -4,26 +4,28 @@
 Trò chơi Fruit-Catching Frog là 1 game về hai chú ếch Pansy và Fluffy. Mục tiêu của 2 cậu là di chuyển khôn khéo để thu thập trái cây và né tránh bom, thuốc độc để đạt điểm cao nhất.
 
 
-- [0. Cách tải game](#0-cách-tải-game)
+- [1. Cách tải game](#0-cách-tải-game)
     * [a. Cách 1: Không bao gồm code.](#a-cách-1-không-bao-gồm-code)
     * [b. Cách 2: Bao gồm code và có thể biên dịch.](#b-cách-2-bao-gồm-code-và-có-thể-biên-dịch)
-- [1. Menu game](#1menu-gane)
-- [2. Các nhân vật, enemy và items của game.](#2Các-nhân-vật,-enemy-và-items-của-game.)
-- [3. Hướng dẫn chơi game](#3-hướng-dẫn-chơi-game)
+- [2. Menu game](#2menu-gane)
+- [3. Các nhân vật, enemy và items của game.](#3Các-nhân-vật,-enemy-và-items-của-game.)
+- [4. Hướng dẫn chơi game](#4-hướng-dẫn-chơi-game)
+- [5. Source code](#5-source-code)
+- [6. Nguồn tham khảo và tài liệu](#5-nguồn-tham-khảo-và-tài-liệu:)
    
 
 
-# 0. Cách tải game
+# 1. Cách tải game
 
 
 ## a. Cách 1: Không bao gồm code.
 
+Tải game (được nén thành .zip) tại [link sau](https://github.com/Giangdurian/Fruit-catching-frog).
+
+Khi tải xong giải nén vào 1 folder và click vào file Fruit-Catching Frog.exe để bắt đầu game.
 
 
 ## b. Cách 2: Bao gồm code và có thể biên dịch.
-
-
-Có thể mở file Fruit-Catching Frog.exe để chơi luôn.
 
 
 **Bước 1:** Cài Visual Studio. Bạn có thể cài đặt các phiên bản của Visual Studio tại link sau: https://visualstudio.microsoft.com/. 
@@ -38,21 +40,17 @@ Có thể mở file Fruit-Catching Frog.exe để chơi luôn.
 Lưu ý: Tải phiên bản Community 2022.
 
 
-**Bước 2:** Clone repo này về bằng lệnh git clone link .git của repo. Hoặc Chọn Code -> Download Zip
+**Bước 2:** Clone repo này về bằng lệnh "git clone link .git của repo" hoặc Chọn Code -> Download Zip. Giải nén code ra 1 Folder và mở File Fruit-Catching Frog.sln
+
+**Bước 3:** Cài đặt các thư viện SDL và môi trường: Vì mình đã tạo thư mục SDL_Lib_VS chứa các thư viện cần thiết cho game và tạo sẵn các đường dẫn trong project property dưới dạng !(Solution) nên bạn không cần phải cài lại các đường dẫn trên nữa. Việc duy nhất bạn cần làm là cài đặt môi trường SDL theo [hướng dẫn](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/windows/msvc2019/index.php) từ bước 8 trở đi.
+
+Lưu ý: Khi thêm path mới, bạn chọn đường dẫn .../SDL_Lib_VS/SDL2-2.30.1/lib/x64
+
+**Bước 4:** Run code bằng cách click vào Local Window Debugger.
 
 
 
-Giải nén code ra 1 Folder và mở File Fruit-Catching Frog.sln
-
-
-
-
-**Bước 3:** Run code bằng cách click vào Local Window Debugger.
-
-
-
-
-# 1. Menu game
+# 2. Menu game
 Menu gồm có 4 chức năng chính, bao gồm 4 nút:
 
 <div style="text-align: center;">
@@ -91,7 +89,7 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
 - Lưu ý: Khi đã click 1 trong 3 nút đầu tiên, người chơi có thể chọn  nút mũi tên quay lại để trở về Menu ban đầu.
 
 
-# 2. Các nhân vật, enemy và items của game.
+# 3. Các nhân vật, enemy và items của game.
 Nhân vật:
 
 
@@ -127,7 +125,7 @@ Các enemy:
 
 
 
-# 3. Hướng dẫn chơi game:
+# 4. Hướng dẫn chơi game:
 
 
 - Khi chọn và mục START, người chơi có thể chọn 1 trong 2 options là single hoặc multiple players như đã nói phía trên. 
@@ -151,29 +149,43 @@ Các enemy:
 
 
 
-# 4. Source code
+# 5. Source code
 
 - Folder SDL_Lib_VS: Là folder chứa tất cả các thử viện SDL cần thiết như SDL2_image, SDL2_mixer, SDL2,... để có thể hỗ trợ đầy đủ cho việc xây dựng và chạy game.
+- Folder img_for_rm: Là folder chứa các hình ảnh để hiện thị lên github cho file readme.
 
-- Folder Fruit-Catching Frog: Là folder chính chứa tất cả source code của game
+- Folder Fruit-Catching Frog: Là folder chính chứa tất cả source code của game:
     * Folder img chưa các hình ảnh chính của game như: Background, Hình ảnh nhân vật, quả, items hỗ trợ, enemy,...
     * Folder img2: Chứa các hình ảnh để tạo hiệu ứng nổ(explosion) cho game.
     * Folder sound: Chứa tất cả các âm thanh của game.
     * GameObject(.h)(.cpp): Là các file xử lý và cập nhât các nhân vật, bao gồm các thuộc tính như vị trí, kích thước, vận tốc, lượng máu(HP), trạng thái (đã chết(isDead), đang nhảy(isJumping)),...
-    * TextureManager: Là file đơn giản xử lý để tạo ra 1 texture mới từ 1 đường dẫn đầu vào, thường là 1 file ảnh.
+    * TextureManager(.h)(.cpp): Là các file đơn giản xử lý để tạo ra 1 texture mới từ 1 đường dẫn đầu vào, thường là 1 file ảnh.
     * Fruit: cung cấp các phương thức để cập nhật vị trí và copy các trái cây hay items hỗ trợ lên renderer, cũng như kiểm tra va chạm giữa các quả trái và người chơi.
-    * Enemy: Là các file cung cấp các phương thức để cập nhật vị trí, copy các trái bom hỗ trợ lên renderer, cũng như kiểm tra va chạm giữa các trái bom và người chơi.
-    * Posion: Có cấu trúc và phương thức cập nhật khả giống với Fruit, nhưng bản chất là 1 enemy.
-    * Explosion: Là các file xử lý và render hiệu ứng nổ.
-    * Game: Là file xử lý mạnh chính của trò chơi có các chức năng chính:
+    * Enemy(.h)(.cpp): Là các file cung cấp các phương thức để cập nhật vị trí, copy các trái bom hỗ trợ lên renderer, cũng như kiểm tra va chạm giữa các trái bom và người chơi.
+    * Posion(.h)(.cpp): Có cấu trúc và phương thức cập nhật khả giống với Fruit, nhưng bản chất là 1 enemy.
+    * Explosion(.h)(.cpp): Là các file xử lý và render hiệu ứng nổ.
+    * Game(.h)(.cpp): Là file xử lý mạch chính của trò chơi có các chức năng chính:
         
-        *  void Game::init(): Hàm này được sử dụng để khởi tạo cửa sổ game và các thành phần khác như renderer, font, âm thanh, và cài đặt các biến cho trò chơi.
+        *  init(): Hàm này được sử dụng để khởi tạo cửa sổ game và các thành phần khác như renderer, font, âm thanh, và cài đặt các biến cho trò chơi.
         *  Bao gồm các hàm spawn để spawn ngẫu nhiêu fruits, items hay enemy và spawn lần đầu tiên ngay khi game vừa bắt đầu.
-        *  Hàm HandleEvent được sử dụng để xử lý sự kiện của SDL như click chuột, nhấn phím.
-        *  Hàm update được sử dụng để cập nhật trạng thái của trò chơi, bao gồm việc spawn các đối tượng, xử lý va chạm và cập nhật điểm số.
-        *  Hàm endgame Hàm này được sử dụng để kết thúc trò chơi khi người chơi thua hoặc chọn chức năng restart, dọn dẹp tài nguyên và hiển thị kết quả cuối cùng.
+        *  Hàm HandleEvent() được sử dụng để xử lý sự kiện của SDL như click chuột, nhấn phím.
+        *  Hàm update() được sử dụng để cập nhật trạng thái của trò chơi, bao gồm việc spawn các đối tượng, xử lý va chạm và cập nhật điểm số.
+        *  Hàm endgame() được sử dụng để kết thúc trò chơi khi người chơi thua hoặc chọn chức năng restart, dọn dẹp tài nguyên và hiển thị kết quả cuối cùng.
         *  Hàm render để render được sử dụng để vẽ các đối tượng và giao diện người dùng lên màn hình.
-        *  Hàm cleanup và clean có nhiệm vụ  giải phóng bộ nhớ và dọn dẹp tài nguyên và thoát khỏi SDL sau khi trò chơi kết thúc hoặc bị đóng.
+        *  Hàm cleanup() và clean() có nhiệm vụ  giải phóng bộ nhớ và dọn dẹp tài nguyên và thoát khỏi SDL sau khi trò chơi kết thúc hoặc bị đóng.
+    * main.cpp: file main chứa vòng lặp chính của trò chơi, trong mỗi vòng lặp:
+        * Xử lý sự kiện: Hàm handleEvent() được gọi để xử lý sự kiện từ người chơi như chuột hoặc bàn phím.
+        * Cập nhật trạng thái trò chơi: Nếu trò chơi đang ở trạng thái đang chơi (playing() trả về true), thì hàm update() được gọi để cập nhật trạng thái của trò chơi.
+        * Vẽ trạng thái hiện tại của trò chơi lên màn hình: Hàm render()
+        * Đảm bảo tần số khung hình (FPS): Đoạn code này đảm bảo rằng trò chơi chạy với tần số khung hình (FPS) nhất định bằng cách chờ một lượng thời gian sau mỗi khung hình.
+# 6. Nguồn tham khảo và tài liệu
+
+- Tham khảo: những phần căn bản về SDL cũng như cách xây dựng khung chương trình mình chủ yếu học từ Channel youtube [Let's Make Game](https://www.youtube.com/@CarlBirch). Bên cạnh đó, mình cũng tham khảo các nguồn tài liệu và tutorial trên [Lazyfoo](https://lazyfoo.net/tutorials/SDL/index.php).
+
+
+- Về hình ảnh và âm thanh: 
+    - Hình ảnh: Mình lấy hình ảnh chủ yếu từ source một tựa game khá nổi tiếng "Cut the rope" của nhà phát triển [zeptolab](https://www.zeptolab.com/) và một số hình ảnh mình tìm kiếm random trên google (thấy cái nào hợp thì pick).
+    - Âm thanh: Hai âm thanh nền được lấy từ âm thanh của video [Cut the Rope OST | 2010 | PC - complete soundtrack in one video](https://www.youtube.com/watch?v=-FC__c7ymKY&list=LL&index=2). Các âm thanh khác như hiệu ứng khi ăn quả, items, khi bị bom nổ,... mình cũng lên google tìm đến khi thấy soundtrack phù hợp thì lấy.
 
 
 

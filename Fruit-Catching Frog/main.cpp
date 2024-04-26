@@ -26,7 +26,6 @@ int main(int argc, char* args[])
             SDL_Delay(FrameDelay - frameTime);
         }
     }
-    Mix_CloseAudio();
     game->clean();
     return 0;
 }
