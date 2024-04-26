@@ -165,7 +165,7 @@ Menu gồm có 4 chức năng chính, bao gồm 4 nút:
 
 <div style="text-align: center;">
 
-![image](img_for_md/resume.png)
+![image](img_for_md/resume.jpg)
 
 </div>
 
@@ -234,10 +234,3 @@ Qua project em đã học thêm được được:
  - cách sử dụng thư viện đồ họa SDL
  - cách quản lý mã nguồn trên github
  - hiểu sâu hơn về kiểu dữ liệu hướng đối tượng(OOP)
-
-
-
-
-
-
-
