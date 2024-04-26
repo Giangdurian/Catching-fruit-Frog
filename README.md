@@ -11,7 +11,7 @@ Link video demo: https://youtu.be/rpZYZXRb4rc
     * [a. Cách 1: Không bao gồm code.](#a-cách-1-không-bao-gồm-code)
     * [b. Cách 2: Bao gồm code và có thể biên dịch.](#b-cách-2-bao-gồm-code-và-có-thể-biên-dịch)
 - [2. Menu game](#2-menu-game)
-- [3. Các nhân vật, enemy và items của game.](#3-các-nhân-vật,-enemy-và-items-của-game.)
+- [3. Các nhân vật, enemy và items của game](#3-các-nhân-vật-enemy-và-items-của-game)
 - [4. Hướng dẫn chơi game](#4-hướng-dẫn-chơi-game)
 - [5. Source code](#5-source-code)
 - [6. Nguồn tham khảo và tài liệu](#6-nguồn-tham-khảo-và-tài-liệu)
