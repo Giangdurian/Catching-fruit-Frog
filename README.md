@@ -105,23 +105,23 @@ Item:
 
 - Fruit: Là các trái cây được spawn ngẫu nhiên từ phía trên. Các loại quả bao gồm:
 
-    - Dưa hấu(Melon) ![image](img_for_md/melon.png)
-    - Nho (Grape) ![image](img_for_md/grape.png)
-    - Cherry ![image](img_for_md/cherry.png)
-    - Chuối (Banana) ![image](img_for_md/banana.png)
-    - Táo (Apple) ![image](img_for_md/apple.png)
-    - Dâu tây (Stawberry) ![image](img_for_md/strawberry.png)
+    - Dưa hấu (Melon)  ![image](img_for_md/melon.png)
+    - Nho (Grape)  ![image](img_for_md/grape.png)
+    - Cherry  ![image](img_for_md/cherry.png)
+    - Chuối (Banana)  ![image](img_for_md/banana.png)
+    - Táo (Apple)  ![image](img_for_md/apple.png)
+    - Dâu tây (Stawberry)  ![image](img_for_md/strawberry.png)
 - Item hỗ trợ:
 
-    - Tim(HP):![image](img_for_md/hp.png) Cộng thêm 1 mạng cho người chơi ăn được
-    - Khiên(Shield):![image](img_for_md/shield.png) Bảo vệ người chơi khỏi ba enemy bất kì trong vòng 5 giây
+    - Tim(HP) ![image](img_for_md/hp.png): Cộng thêm 1 mạng cho người chơi ăn được
+    - Khiên(Shield) ![image](img_for_md/shield.png): Bảo vệ người chơi khỏi ba enemy bất kì trong vòng 5 giây
 
 
 Các enemy:
 
 - Bombs (Bom) ![image](img_for_md/bom.png): là những trái bom với cách di chuyển va đập với các cạnh của màn hình và bật ra, vận tốc quả bom sẽ thay đổi mỗi lần va chạm vào màn hình nhưng không vượt quá vận tốc giới hạn. Khi dính 1 trái bom, nó sẽ biến mất nhưng nhân vật cũng sẽ mất một mạng.
 
-- Posions (Thuốc độc) ![image](img_for_md/posion.png): Là những bình thuốc độc rơi xuống cùng với các item fruits từ phía trên. Cũng giống như bom, khi người chơi dính thuốc độc, người chơi sẽ mất 1 mạng.
+- Posions (Thuốc độc) ![image](img_for_md/poision.png): Là những bình thuốc độc rơi xuống cùng với các item fruits từ phía trên. Cũng giống như bom, khi người chơi dính thuốc độc, người chơi sẽ mất 1 mạng.
 
 
 
