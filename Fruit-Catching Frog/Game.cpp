@@ -110,8 +110,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	explosionSound = Mix_LoadWAV("sound/explosion.wav");
 	healSound = Mix_LoadWAV("sound/healing.wav");
 	shieldSound = Mix_LoadWAV("sound/shield.wav");
-	Mix_VolumeChunk(background_music, MIX_MAX_VOLUME / 3);
-	Mix_VolumeChunk(game_play_music, MIX_MAX_VOLUME / 3);
+	Mix_VolumeChunk(background_music, MIX_MAX_VOLUME / 15);
+	Mix_VolumeChunk(game_play_music, MIX_MAX_VOLUME / 15);
+	Mix_VolumeChunk(clickingSound, MIX_MAX_VOLUME / 8);
+	Mix_VolumeChunk(eatingSound, MIX_MAX_VOLUME / 8);
+	Mix_VolumeChunk(explosionSound, MIX_MAX_VOLUME / 8);
+	Mix_VolumeChunk(shieldSound, MIX_MAX_VOLUME / 8);
+	Mix_VolumeChunk(healSound, MIX_MAX_VOLUME / 8);
 	Mix_PlayChannel(2, background_music, -1);
 	//
 	MAX_ENEMY_NUMBERS = 5;
